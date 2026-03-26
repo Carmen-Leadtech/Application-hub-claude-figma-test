@@ -1,0 +1,106 @@
+.wrapper {
+  display: flex;
+  gap: var(--spacing-m);
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:hover:not(.disabled) .circle::before {
+    opacity: 0.08;
+  }
+
+  &:active:not(.disabled) .circle::before {
+    opacity: 0.15;
+  }
+
+  &:focus:not(.disabled):not(:active) .circle::after {
+    opacity: 1;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.label {
+  font-family: var(--font-family-body);
+  color: var(--color-text-default);
+  font-weight: var(--font-weight-strong);
+}
+
+.labelS {
+  font-size: var(--font-size-body-m-default);
+  line-height: var(--line-height-body-m-default);
+}
+
+.labelM {
+  font-size: var(--font-size-titles-m);
+  line-height: var(--line-height-titles-m);
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.circle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #001629;
+  border-radius: 50%;
+  background-color: var(--color-fill-common-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+/* Hover/Pressed glow circle */
+.circle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  background: #001629;
+  z-index: -1;
+}
+
+/* Focus ring */
+.circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+  border: 2px solid var(--color-border-interactivity-default);
+  opacity: 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-fill-interactivity-default);
+}

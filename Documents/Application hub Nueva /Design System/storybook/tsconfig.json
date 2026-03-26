@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ES2022",
+    "noImplicitAny": true,
+    "noLib": false,
+    "outDir": "dist",
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "ES2020",
+    "types": ["node", "vitest/globals"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "allowImportingTsExtensions": false,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+
+    /* Linting */
+    "baseUrl": "./src",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "paths": {
+      "types/*": ["types/*"],
+      "@tokens/*": ["styles/*"]
+    }
+  },
+  "exclude": ["dist", "node_modules", "vite.config.js"],
+  "include": ["src", "vitest.setup.ts"]
+}

@@ -1,0 +1,267 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-body);
+  font-style: normal;
+  line-height: var(--line-height-small-details-xs-captions);
+
+  &:hover {
+    & .label,
+    & .suffix,
+    & .decorator,
+    & .assistiveText {
+      color: #3b3d40;
+    }
+
+    & .suffix > svg path,
+    & .decorator > svg path {
+      fill: #3b3d40;
+    }
+  }
+
+  &:focus-within {
+    & .container {
+      background: var(--color-fill-common-default);
+      border: 1px solid #1f96ff;
+    }
+
+    & .label {
+      color: var(--color-text-interactivity-default);
+    }
+
+    & .suffix,
+    & .decorator,
+    & .assistiveText {
+      color: #3b3d40;
+    }
+
+    & .suffix > svg path,
+    & .decorator > svg path {
+      fill: #3b3d40;
+    }
+  }
+}
+
+.root.error {
+  & .assistiveText {
+    color: #99300a;
+  }
+
+  & .container {
+    border: 1px solid #f2612c;
+  }
+
+  &:focus-within {
+    & .label {
+      color: #99300a;
+    }
+
+    & .container {
+      border: 1px solid #f2612c;
+    }
+  }
+}
+
+.root.disabled {
+  & .container {
+    background: var(--color-fill-common-weaker);
+    border: 1px solid var(--color-fill-common-weaker); /* should there be a --color-border-common-weaker? */
+  }
+
+  & .input,
+  & .textarea {
+    color: var(--color-text-disabled);
+  }
+
+  & .label,
+  & .suffix,
+  & .decorator,
+  & .assistiveText {
+    color: var(--color-text-disabled);
+  }
+
+  & .suffix > svg path,
+  & .decorator > svg path {
+    fill: var(--color-icons-weak);
+  }
+
+  &:focus-within {
+    & .container {
+      background: var(--color-fill-common-weaker);
+      border: 1px solid var(--color-fill-common-weaker); /* should there be a --color-border-common-weaker? */
+    }
+
+    & .label,
+    & .suffix,
+    & .decorator,
+    & .assistiveText {
+      color: var(--color-text-disabled);
+    }
+
+    & .suffix > svg path,
+    & .decorator > svg path {
+      fill: var(--color-icons-weak);
+    }
+  }
+}
+
+.root.disabled.error {
+  & .container {
+    background: var(--color-fill-common-weaker);
+    border: 1px solid var(--color-fill-common-weaker); /* should there be a --color-border-common-weaker? */
+  }
+
+  & .input,
+  & .textarea {
+    color: var(--color-text-disabled);
+  }
+
+  & .label,
+  & .suffix,
+  & .decorator,
+  & .assistiveText {
+    color: var(--color-text-disabled);
+  }
+
+  & .suffix > svg path,
+  & .decorator > svg path {
+    fill: var(--color-icons-weak);
+  }
+}
+
+.container {
+  background: var(--color-fill-common-weaker);
+  border-radius: var(--corner-radius-xs);
+  border: 1px solid var(--color-fill-common-weaker);
+  display: flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-m);
+  position: relative;
+  transition: all 0.1s ease-in-out;
+}
+
+.box {
+  position: relative;
+  flex-grow: 1;
+}
+
+.input {
+  height: 40px;
+  flex-grow: 1;
+  width: inherit;
+  border-radius: var(--corner-radius-xs);
+  border: none;
+  box-sizing: border-box;
+  padding: var(--spacing-m) 0;
+  border: transparent;
+  background-color: transparent;
+  width: 100%;
+  color: #3b3d40;
+  font-size: var(--font-size-body-m-default);
+
+  &:not(:placeholder-shown) {
+    padding-bottom: 6px;
+    font-weight: var(--font-weight-strong);
+  }
+
+  &:focus {
+    outline: none;
+    padding-bottom: 6px;
+  }
+}
+
+.inputPlaceholder + .label,
+.input:not(:placeholder-shown) + .label,
+.input:focus + .label {
+  font-size: var(--font-size-small-details-xs-captions);
+  transform: translate(0, -14px);
+}
+
+/* Multiline textarea: text wraps to next line, no horizontal scroll, no user resize */
+.textarea {
+  composes: input;
+  height: auto;
+  min-height: 40px;
+  padding-top: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+  resize: none;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
+}
+
+.textarea::placeholder {
+  transform: none;
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.textarea:not(:placeholder-shown),
+.textarea:focus {
+  padding-bottom: var(--spacing-m);
+}
+
+/* Multiline: no label, textarea only; same padding as single-line input so text starts in same position */
+.root.multiline .box {
+  align-items: flex-start;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: all 0.1s ease-in-out;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-m-default);
+}
+
+.suffix {
+  display: flex;
+  margin: auto;
+  gap: var(--spacing-xs);
+  color: var(--color-text-secondary);
+
+  & > svg path {
+    fill: #62666a;
+    transition: all 0.1s ease-in-out;
+  }
+}
+
+.decorator {
+  color: var(--color-text-secondary);
+  margin: auto;
+
+  &:empty {
+    margin: 0;
+  }
+
+  & > svg path {
+    fill: #62666a;
+    transition: all 0.1s ease-in-out;
+  }
+}
+
+.assistiveText {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small-details-xs-captions);
+  margin-top: 5px;
+  text-align: left;
+}
+
+.assistiveText p {
+  margin: 0;
+}
+
+.assistiveTextCenter {
+  text-align: center;
+}
+
+.assistiveTextRight {
+  text-align: right;
+}

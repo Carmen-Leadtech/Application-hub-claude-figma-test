@@ -1,0 +1,186 @@
+.root {
+  align-items: flex-start;
+  color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.content {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  justify-content: flex-end;
+  max-width: 680px;
+  width: 100%;
+}
+
+.spinner {
+  position: relative;
+  display: inline-flex;
+  width: var(--cv-loading-steps-spinner-size, 40px);
+  height: var(--cv-loading-steps-spinner-size, 40px);
+}
+
+.spinnerForeground {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+}
+
+.steps {
+  animation: fadeInContainer 1200ms ease-out forwards;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s-exception);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-s-exception);
+  opacity: 0.5;
+  animation: stepFadeIn 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--cv-loading-steps-delay, 0ms);
+}
+
+.stepIcon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.stepCircle {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid var(--color-border-interactivity-default);
+  box-sizing: border-box;
+  opacity: 0;
+  background: conic-gradient(
+    var(--color-fill-illustrations-brand) 0deg,
+    color-mix(in srgb, var(--color-fill-illustrations-brand) 8%, transparent) 0deg
+  );
+  animation: circleFill 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--cv-loading-steps-delay, 0ms);
+}
+
+.stepCheck {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: stepPop 450ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(var(--cv-loading-steps-delay, 0ms) + 520ms);
+}
+
+.stepCheckSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.stepCheckSvg path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: tickDraw 450ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: calc(var(--cv-loading-steps-delay, 0ms) + 560ms);
+}
+
+.stepText {
+  font-family: var(--font-family-base, 'Roboto', sans-serif);
+  font-size: var(--cv-loading-steps-font-size);
+  line-height: var(--cv-loading-steps-line-height);
+  color: #6b7280;
+}
+
+@keyframes fadeInContainer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes stepFadeIn {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes stepPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes circleFill {
+  0% {
+    opacity: 0;
+    background: conic-gradient(
+      var(--color-fill-illustrations-brand) 0deg,
+      color-mix(in srgb, var(--color-fill-illustrations-brand) 8%, transparent) 0deg
+    );
+  }
+  20% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+    background: conic-gradient(
+      var(--color-fill-illustrations-brand) 360deg,
+      color-mix(in srgb, var(--color-fill-illustrations-brand) 8%, transparent) 360deg
+    );
+  }
+}
+
+@keyframes tickDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .stepText {
+    font-size: var(--font-size-body-s);
+    line-height: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steps,
+  .step,
+  .stepIcon {
+    animation: none;
+  }
+
+  .step,
+  .stepIcon {
+    opacity: 1;
+    transform: none;
+  }
+}

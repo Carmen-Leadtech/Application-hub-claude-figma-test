@@ -1,0 +1,122 @@
+.root {
+  background: var(--color-fill-common-default);
+  border: 1px solid var(--color-border-weak);
+  color: var(--color-text-secondary);
+
+  border-radius: var(--corner-radius-xl);
+
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 36px;
+  padding: var(--spacing-xs) var(--spacing-m);
+  position: relative;
+
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-m-default);
+  font-style: normal;
+  font-weight: var(--font-weight-default);
+  cursor: pointer;
+
+  &:hover {
+    border-color: #1f96ff;
+    color: #141415;
+  }
+
+  &:focus-visible {
+    color: #141415;
+    outline: 2px solid var(--color-border-interactivity-pressed);
+  }
+}
+
+.root:hover .closeIcon {
+  outline: 1px solid var(--color-text-interactivity-hover);
+  outline-offset: 4px;
+}
+
+.selected {
+  background: var(--color-fill-common-brand-weak);
+  border-color: #1f96ff;
+  color: var(--color-text-brand);
+
+  &:hover {
+    border-color: var(--color-border-interactivity-hover);
+    color: var(--color-text-interactivity-pressed);
+  }
+
+  &:focus-visible {
+    color: var(--color-text-interactivity-pressed);
+    outline: 2px solid var(--color-border-interactivity-pressed);
+  }
+}
+
+.editable {
+  background: var(--color-fill-common-brand-weak);
+  border-color: #1f96ff;
+  color: var(--color-text-brand);
+  cursor: text;
+  &:hover {
+    color: var(--color-text-interactivity-pressed);
+  }
+
+  &:focus-visible {
+    background: var(--color-fill-common-default);
+    color: var(--color-text-brand);
+    outline: 2px solid var(--color-border-interactivity-pressed);
+  }
+}
+
+.editing {
+  background: var(--color-fill-common-default);
+  border-color: var(--color-border-interactivity-default);
+  color: var(--color-text-interactivity-pressed);
+}
+
+.dragging {
+  box-shadow: 0px 3px 8px 0px rgb(181 186 189 / 0.75);
+}
+
+.label {
+  &:focus-visible {
+    outline: none;
+  }
+
+  &::selection {
+    color: #141415;
+    background: var(--color-fill-interactivity-disabled);
+  }
+}
+
+.dragIcon {
+  border-radius: 50%;
+  cursor: grab;
+  display: flex;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-interactivity-pressed);
+  }
+
+  & svg * {
+    fill: #70bcff;
+  }
+}
+
+.dragIconDragging {
+  cursor: grabbing;
+}
+
+.closeIcon {
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 0 0 0 8px;
+
+  &:focus-visible,
+  &:hover {
+    outline: 1px solid var(--color-border-interactivity-hover);
+    outline-offset: 4px;
+  }
+}

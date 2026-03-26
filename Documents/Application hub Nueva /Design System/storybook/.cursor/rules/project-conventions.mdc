@@ -1,0 +1,323 @@
+---
+description: Project structure, scripts, code conventions, CSS Modules patterns, testing practices, and Storybook guidelines for the cv-ui-kit component library
+alwaysApply: true
+---
+
+# Project Conventions - cv-ui-kit
+
+## General Information
+
+- **Type**: React component library
+- **Package**: `@npm_leadtech/cv-ui-kit`
+- **CSS Variables Prefix**: `--cv-`
+- **Test Framework**: Vitest + React Testing Library
+- **Documentation**: Storybook
+
+---
+
+## Project Structure
+
+```
+cv-ui-kit/
+├── .cursor/rules/          # Cursor AI rules
+├── .husky/                  # Git hooks
+├── .storybook/              # Storybook configuration
+├── dist/                    # Build output
+├── src/
+│   ├── components/          # React components
+│   ├── hooks/               # Custom hooks
+│   ├── types/               # TypeScript types
+│   └── index.ts             # Entry point
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── vitest.setup.ts
+```
+
+---
+
+## Available Scripts
+
+| Script                    | Description                       |
+| ------------------------- | --------------------------------- |
+| `npm run dev`             | Starts Storybook in development   |
+| `npm run dev:watch        | Builds the library in development |
+| `npm run build`           | Builds the library                |
+| `npm run build:storybook` | Builds Storybook                  |
+| `npm run test`            | Runs tests once                   |
+| `npm run test:watch`      | Runs tests in watch mode          |
+| `npm run test:coverage`   | Runs tests with coverage          |
+| `npm run lint`            | Runs ESLint                       |
+| `npm run lint:fix`        | Runs ESLint with auto-fix         |
+| `npm run format`          | Formats with Prettier             |
+| `npm run typecheck`       | Checks TypeScript types           |
+| `npm run convert-tokens`  | Convert Figma tokens to css vars  |
+
+---
+
+## Code Conventions
+
+### Imports
+
+Import order (handled by ESLint):
+
+1. React and external libraries
+2. Internal components (alias `components/`)
+3. Internal hooks
+4. Types (alias `types/`)
+5. Local styles (CSS Modules)
+
+```tsx
+import { useState } from 'react';
+
+import classNames from 'classnames';
+import { CvElement } from 'types/CvElement';
+
+import styles from './Component.module.css';
+```
+
+### TypeScript
+
+- Use `interface` for component props
+- Export types alongside components
+- Avoid `any`, use `unknown` if needed
+- Optional props should have default values in destructuring
+
+### Naming
+
+| Element             | Convention             | Example                               |
+| ------------------- | ---------------------- | ------------------------------------- |
+| Components          | PascalCase             | `Button`, `ProductCard`               |
+| Props interface     | PascalCase + Props     | `ButtonProps`                         |
+| Component files     | PascalCase             | `Button.tsx`                          |
+| Style files         | PascalCase + module    | `Button.module.css`                   |
+| CSS Modules classes | camelCase              | `.root`, `.fullWidth`, `.primary`     |
+| CSS Variables       | kebab-case with prefix | `--cv-button-bg`, `--cv-button-color` |
+| Hooks               | camelCase with "use"   | `useClickOutside`                     |
+
+---
+
+## CSS Modules
+
+This library uses **CSS Modules** for locally scoped styles.
+
+### Import
+
+```tsx
+import styles from './Component.module.css';
+```
+
+### Class usage
+
+```tsx
+// Single class
+<div className={styles.root}>
+
+// Multiple classes with classnames
+<div className={classNames(styles.root, styles[variant], {
+  [styles.fullWidth]: isFullWidth,
+})}>
+```
+
+### CSS naming conventions
+
+```css
+/* Component root class */
+.root { }
+
+/* Variants - applied via styles[variant] */
+.primary { }
+.secondary { }
+
+/* Sizes - applied via styles[size] */
+.S { }
+.M { }
+
+/* Boolean modifiers */
+.fullWidth { }
+.disabled { }
+.checked { }
+
+/* Inner elements */
+.label { }
+.icon { }
+.container { }
+```
+
+### CSS Variables
+
+Component-scoped CSS variables use the `--cv-` prefix. Their values **must** reference **semantic design tokens** — never primitive tokens.
+
+**Allowed references:**
+- Semantic tokens: `--color-*`, `--spacing-*`, `--corner-radius-*`, `--font-size-*`, `--line-height-*`, `--icon-size-*`
+- Custom component variables: `--cv-*`
+
+**Forbidden references (primitives):**
+- `--size-*`, `--brand-light-*`, `--brand-dark-*`, `--neutrals-*`, `--system-error-*`, `--system-success-*`, `--system-warning-*`, `--system-info-*`, `--interactivity-states-*`, `--gradients-*`, `--font-family-*`, `--font-weight-*`
+
+```css
+/* Correct — semantic tokens */
+.root {
+  --cv-button-background: var(--color-fill-common-brand);
+  --cv-button-color: var(--color-text-inverted);
+
+  background: var(--cv-button-background);
+  color: var(--cv-button-color);
+}
+
+/* Wrong — primitive tokens */
+.root {
+  --cv-button-background: var(--brand-dark-50);    /* use --color-fill-common-brand */
+  --cv-button-color: var(--neutrals-white-00);     /* use --color-text-inverted */
+}
+```
+
+---
+
+## Git Hooks (Husky)
+
+### Pre-commit
+
+- `npm run lint:fix`
+- `npm run format`
+- `npm run typecheck`
+
+### Pre-push
+
+- `npm run test`
+- `npm run typecheck`
+
+---
+
+## Important Dependencies
+
+### Runtime (dependencies)
+
+- `classnames`: Utility for conditional CSS classes
+
+### Peer Dependencies
+
+- `react`: ^18.3.1
+- `react-dom`: ^18.3.1
+
+### Key Dev Dependencies
+
+- `vite`: Build tool
+- `vitest`: Testing framework
+- `@testing-library/react`: Testing utilities
+- `@storybook/react-vite`: Documentation
+- `typescript`: Type checking
+- `eslint` + `prettier`: Linting and formatting
+
+---
+
+## Accessibility
+
+- Use appropriate ARIA roles
+- Include `aria-label` when needed
+- Support keyboard navigation
+- Maintain adequate color contrast
+- Use semantic elements (`button`, `input`, etc.)
+
+---
+
+## Testing
+
+### Preferred Queries (Testing Library)
+
+1. `getByRole` - Best for accessibility
+2. `getByLabelText` - For labeled inputs
+3. `getByText` - For text content
+4. `getByTestId` - Last resort
+
+### Assertions for CSS Modules
+
+```tsx
+// Verify classes with CSS Modules (hashed names)
+expect(button.className).toMatch(/primary/);
+expect(button.className).toMatch(/fullWidth/);
+
+// Verify attributes
+expect(button).toHaveAttribute('data-qa', 'test-qa');
+expect(button).toHaveAttribute('id', 'test-id');
+```
+
+### Mocks
+
+```tsx
+// Function mock
+const handleClick = vi.fn();
+
+// ResizeObserver mock (already configured in vitest.setup.ts)
+// No need to mock manually
+```
+
+---
+
+## Storybook
+
+- All stories are centered by default (`layout: 'centered'`)
+- Global font: Roboto
+- Document props with `argTypes`, including descriptions and default values
+- Create stories for each important variant with its own description
+
+### Component documentation via README.md
+
+Every component **must** have a `README.md` file in its folder. The README is imported as a raw string and used as the Storybook docs description — **do not** write inline component descriptions in the story file.
+
+```tsx
+import { Meta, StoryFn } from '@storybook/react';
+
+import { ComponentName, type ComponentNameProps } from './ComponentName';
+import README from './README.md?raw';
+
+export default {
+  title: 'Components/ComponentName',
+  component: ComponentName,
+  parameters: {
+    docs: {
+      description: {
+        component: README,
+      },
+    },
+  },
+  // ...argTypes
+} as Meta<typeof ComponentName>;
+```
+
+The `?raw` suffix tells Vite to import the file as a plain string. This keeps documentation in a single Markdown source of truth shared by Storybook and any other tooling.
+
+---
+
+## Existing Components
+
+List of components in the library:
+
+| Component        | Description                           |
+| ---------------- | ------------------------------------- |
+| AccordionCard    | Collapsible card                      |
+| Button           | Button with variants                  |
+| ButtonIcon       | Icon-only button                      |
+| Card             | Card with label and icons             |
+| Checkbox         | Checkbox with label                   |
+| CircularProgress | Circular progress indicator           |
+| Dialog           | Modal dialog                          |
+| DonutChart       | Donut chart                           |
+| FileUploader     | File uploader                         |
+| Icon             | SVG icons                             |
+| LanguageSelector | Language selector                     |
+| MenuItem         | Menu item                             |
+| Popover          | Floating popover                      |
+| ProductCard      | Product card                          |
+| RadioButton      | Radio button with label               |
+| ScoreProgress    | Score progress                        |
+| ScoreTag         | Score tag                             |
+| SectionProgress  | Section progress                      |
+| Select           | Select dropdown                       |
+| SelectMenu       | Selection menu                        |
+| Tab              | Single tab                            |
+| Tabs             | Tabs container                        |
+| Badge            | Status badge (info, warning, success) |
+| Chip             | Interactive chip with drag & drop     |
+| Textfield        | Text field                            |
+| Wysiwyg          | WYSIWYG editor                        |

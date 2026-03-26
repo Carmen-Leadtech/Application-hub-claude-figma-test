@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+/* Design System tokens */
+@import "../Design System/storybook/src/styles/design-system-tokens/design-system-tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Status tokens (UNMATCHED in DS — defined locally until added to DS) */
+:root {
+  --status-draft-fill: var(--neutrals-light-30);
+  --status-applied-fill: var(--brand-dark-50);
+  --status-underreview-fill: var(--system-warning-50);
+  --status-closed-fill: var(--neutrals-dark-60);
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 220 20% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 14%;
+
+    --primary: 209 100% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 14%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 20% 14%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 209 100% 45%;
+
+    --radius: 0.5rem;
+
+    --sidebar-bg: 0 0% 100%;
+    --sidebar-foreground: 220 10% 36%;
+    --sidebar-border: 220 13% 93%;
+    --sidebar-active: 209 100% 45%;
+    --sidebar-width: 220px;
+
+    --badge-new-bg: 220 20% 14%;
+    --badge-new-foreground: 0 0% 100%;
+
+    --status-draft: 220 10% 70%;
+    --status-applied: 209 100% 45%;
+    --status-underreview: 38 92% 50%;
+    --status-closed: 220 10% 35%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 0 0% 95%;
+    --card: 220 20% 14%;
+    --card-foreground: 0 0% 95%;
+    --popover: 220 20% 14%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 20%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 220 14% 20%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 220 14% 20%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 220 14% 22%;
+    --input: 220 14% 22%;
+    --ring: 209 100% 50%;
+    --sidebar-bg: 220 20% 12%;
+    --sidebar-foreground: 220 10% 60%;
+    --sidebar-border: 220 14% 18%;
+    --sidebar-active: 209 100% 50%;
+    --badge-new-bg: 0 0% 90%;
+    --badge-new-foreground: 220 20% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Job details form → read-only transition */
+.job-details-enter {
+  animation: jobDetailsFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes jobDetailsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

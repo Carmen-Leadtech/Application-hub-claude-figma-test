@@ -1,0 +1,51 @@
+.root {
+  align-items: center;
+  background-color: var(--color-fill-common-weak);
+  border-radius: 1000px;
+  display: flex;
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.bar {
+  border-radius: 1000px;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.label {
+  color: #001629;
+  font-family: var(--font-family-small-details);
+  font-size: var(--font-size-small-details-xs-captions);
+  font-weight: 700;
+  left: 8px;
+  letter-spacing: 0.5px;
+  line-height: var(--line-height-small-details-xs-captions);
+  opacity: 0.5;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.success {
+  background-color: #00d3a9;
+
+  & .bar {
+    background-color: #00d3a9;
+  }
+}
+
+.warning {
+  & .bar {
+    background-color: #ffc827;
+  }
+}
+
+.danger {
+  & .bar {
+    background-color: #fc916c;
+  }
+}

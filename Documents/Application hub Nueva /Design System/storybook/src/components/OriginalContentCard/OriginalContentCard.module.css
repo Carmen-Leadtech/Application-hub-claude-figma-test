@@ -1,0 +1,96 @@
+/* Content State Styles */
+.contentRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--spacing-l);
+  row-gap: var(--spacing-m);
+  align-self: stretch;
+  width: 100%;
+}
+
+.paragraph {
+  grid-column: 1 / -1;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-s);
+  font-style: normal;
+  font-weight: var(--font-weight-default);
+  line-height: var(--line-height-body-s);
+  margin: 0;
+  opacity: 0.75;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
+/* Empty State Styles */
+.emptyRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--corner-radius-s);
+  background: var(--color-fill-common-weaker);
+  padding: var(--spacing-xxxl) var(--spacing-l);
+}
+
+.emptyContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  align-items: center;
+  width: 100%;
+  max-width: 260px;
+}
+
+.emptyIllustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 113px;
+  flex-shrink: 0;
+}
+
+.emptyTextWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.emptyTitle {
+  color: #5a5e61;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-m-default);
+  font-style: normal;
+  font-weight: var(--font-weight-strong);
+  line-height: var(--line-height-body-m-default);
+  margin: 0;
+  width: 100%;
+}
+
+.emptyDescription {
+  color: #969b9e;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-s);
+  font-style: normal;
+  font-weight: var(--font-weight-default);
+  line-height: var(--line-height-body-s);
+  margin: 0;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .paragraph {
+    grid-column: 1 / span 2;
+  }
+}

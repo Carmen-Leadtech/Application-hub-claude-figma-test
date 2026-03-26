@@ -1,0 +1,652 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Design System/CSS Variable Workflow" />
+
+# CSS Variables Workflow in cv-ui-kit
+
+**Walkthrough & Best Practices** | ~30 min presentation + 15 min Q&A
+
+This session covers the end-to-end pipeline for managing CSS variables (design tokens) in **cv-ui-kit**, powered by **Style Dictionary v4** and **Tokens Studio transforms**. After this walkthrough you will be able to update, extend, and consume design tokens with confidence.
+
+**Prerequisites:** None — familiarity with CSS custom properties is helpful but not required.
+
+---
+
+## 1 — The Figma-to-Code Pipeline
+
+Design tokens flow through a fully automated pipeline. No CSS variable is written by hand.
+
+```
+┌──────────────┐     ┌───────────────────┐     ┌──────────────────────┐     ┌──────────────────────────┐     ┌────────────────────┐
+│              │     │                   │     │                      │     │                          │     │                    │
+│    Figma     │────>│  JSON export      │────>│  npm run             │────>│  design-system-          │────>│  Components        │
+│  Variables   │     │  (DTCG format)    │     │  convert-tokens      │     │  tokens.css              │     │  (CSS Modules)     │
+│              │     │                   │     │  (Style Dictionary)  │     │  (auto-generated)        │     │                    │
+└──────────────┘     └───────────────────┘     └──────────────────────┘     └──────────────────────────┘     └────────────────────┘
+```
+
+### Key files
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>File</th>
+      <th>Editable?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Source (from Figma)</td>
+      <td><code>src/styles/design-system-tokens/design-system-tokens.json</code></td>
+      <td>Replaced from Figma export</td>
+    </tr>
+    <tr>
+      <td>Build script</td>
+      <td><code>scripts/build-tokens.ts</code></td>
+      <td>Yes (maintained by devs)</td>
+    </tr>
+    <tr>
+      <td>Transform helpers</td>
+      <td><code>scripts/build-tokens.transforms.ts</code></td>
+      <td>Yes (maintained by devs)</td>
+    </tr>
+    <tr>
+      <td><strong>Generated output</strong></td>
+      <td><code>src/styles/design-system-tokens/design-system-tokens.css</code></td>
+      <td><strong>No — never edit by hand</strong></td>
+    </tr>
+    <tr>
+      <td>Manual tokens</td>
+      <td><code>src/styles/tokens.css</code></td>
+      <td>Yes (breakpoints, etc.)</td>
+    </tr>
+  </tbody>
+</table>
+
+### The JSON input format (DTCG)
+
+The Figma export uses the [Design Token Community Group](https://tr.designtokens.org/format/) format with `$value` and `$type` properties. Tokens are grouped inside Figma collection wrappers:
+
+```json
+{
+  "Color Primitives/Mode 1": {
+    "brand": {
+      "dark": {
+        "50": { "$value": "#006dcc", "$type": "color" }
+      }
+    }
+  },
+  "COLORS/Mode 1": {
+    "background": {
+      "brand": { "$value": "{brand.dark.50}", "$type": "color" }
+    }
+  },
+  "$themes": [],
+  "$metadata": { "tokenSetOrder": ["..."] }
+}
+```
+
+Notice how `"{brand.dark.50}"` is a **reference** — the build script resolves it to `var(--brand-dark-50)` in the CSS output.
+
+---
+
+## 2 — Token Categories & Naming
+
+The JSON source contains **8 collections**. The build script processes 7 of them (Screen resolutions are filtered out as designer-only):
+
+<table>
+  <thead>
+    <tr>
+      <th>Figma Collection</th>
+      <th>Category</th>
+      <th>Example token path</th>
+      <th>Generated CSS variable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Color Primitives/Mode 1</td>
+      <td>Color primitives</td>
+      <td><code>brand.dark.50</code></td>
+      <td><code>--brand-dark-50</code></td>
+    </tr>
+    <tr>
+      <td>Size Primitives/Mode 1</td>
+      <td>Size primitives</td>
+      <td><code>48</code></td>
+      <td><code>--size-48</code></td>
+    </tr>
+    <tr>
+      <td>COLORS/Mode 1</td>
+      <td>Semantic colors</td>
+      <td><code>background.brand</code></td>
+      <td><code>--color-background-brand</code></td>
+    </tr>
+    <tr>
+      <td>COLORS/Mode 1</td>
+      <td>Semantic icon colors</td>
+      <td><code>icons.brand</code></td>
+      <td><code>--color-icons-brand</code></td>
+    </tr>
+    <tr>
+      <td>TYPOGRAPHY/Mode 1</td>
+      <td>Typography</td>
+      <td><code>font-size.Titles.xxl</code></td>
+      <td><code>--font-size-titles-xxl</code></td>
+    </tr>
+    <tr>
+      <td>SPACING/Mode 1</td>
+      <td>Spacing (common)</td>
+      <td><code>common.xs</code></td>
+      <td><code>--spacing-xs</code></td>
+    </tr>
+    <tr>
+      <td>SPACING/Mode 1</td>
+      <td>Spacing (larger)</td>
+      <td><code>larger.larger-1</code></td>
+      <td><code>--spacing-larger-1</code></td>
+    </tr>
+    <tr>
+      <td>CORNER RADIUS/Mode 1</td>
+      <td>Corner radius</td>
+      <td><code>corner-radius.s-default</code></td>
+      <td><code>--corner-radius-s</code></td>
+    </tr>
+    <tr>
+      <td>ICONS/Mode 1</td>
+      <td>Icon sizes</td>
+      <td><code>m-default</code></td>
+      <td><code>--icon-size-m</code></td>
+    </tr>
+    <tr>
+      <td>Screen resolutions</td>
+      <td><em>(filtered out)</em></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+### How naming works
+
+The `name/readable-css` custom transform in `build-tokens.transforms.ts` applies category-aware rules:
+
+- **Size primitives** — single numeric key gets `size-` prefix: `"48"` → `--size-48`
+- **Color primitives** — path joined with hyphens: `brand.dark.50` → `--brand-dark-50`
+- **Semantic colors** — `background`, `border`, `text`, `fill` get `color-` prefix: `background.brand` → `--color-background-brand`
+- **Semantic icon colors** — `icons` sub-paths get `color-` prefix: `icons.brand` → `--color-icons-brand`
+- **Spacing** — `common` maps to `spacing-`: `common.xs` → `--spacing-xs`; `larger` deduplicates: `larger.larger-1` → `--spacing-larger-1`
+- **Corner radius** — strips `-default` suffix: `corner-radius.s-default` → `--corner-radius-s`
+- **Icon sizes** — known single-segment keys get `icon-size-` prefix and strip `-default`: `m-default` → `--icon-size-m`
+- **Typography** — path joined directly: `font-size.Titles.xxl` → `--font-size-titles-xxl`
+
+---
+
+## 3 — Token Tiers: Primitive vs Semantic
+
+The design system uses a **two-layer architecture**. This is the most important concept to understand. The generated `design-system-tokens.css` file reflects this structure with **two separate `:root` blocks** — primitive tokens first, then semantic tokens.
+
+### Primitive tokens (Layer 1)
+
+Raw values that form the foundation. **Never use these directly in components.** These come from the "Color Primitives" and "Size Primitives" sets in the Figma export and appear in the first `:root` block:
+
+```css
+/* Primitive design tokens */
+:root {
+  /* Size primitives — pixel values */
+  --size-4: 4px;
+  --size-16: 16px;
+  --size-48: 48px;
+
+  /* Color primitives — hex values */
+  --brand-dark-50: #006dcc;
+  --neutrals-white-00: #ffffff;
+  --system-error-50: #f15e29;
+}
+```
+
+### Semantic tokens (Layer 2)
+
+Purpose-based variables that **reference** primitives via `var()`. **Always use these in components.** These come from the "COLORS", "TYPOGRAPHY", "SPACING", "CORNER RADIUS", and "ICONS" sets and appear in the second `:root` block:
+
+```css
+/* Semantic design tokens */
+:root {
+  /* Colors — reference color primitives */
+  --color-background-brand: var(--brand-dark-50);
+  --color-text-default: var(--neutrals-black-80);
+
+  /* Spacing — reference size primitives */
+  --spacing-xs: var(--size-8);
+  --spacing-m: var(--size-16);
+
+  /* Typography — reference size primitives */
+  --font-size-titles-xxl: var(--size-48);
+  --line-height-titles-xxl: var(--size-56);
+
+  /* Corner radius — reference size primitives */
+  --corner-radius-s: var(--size-8);
+
+  /* Icon sizes — reference size primitives */
+  --icon-size-m: var(--size-24);
+}
+```
+
+### The rule
+
+> **Components must only reference semantic tokens.** Primitives (`--brand-dark-50`, `--size-16`) are implementation details — they exist so that semantic tokens can alias them, but application code should never use them directly.
+
+### Manual tokens
+
+Tokens that are not managed by the Figma export live in `src/styles/tokens.css`:
+
+```css
+:root {
+  --bp-sm: 768px;
+  --bp-md: 1024px;
+  --bp-lg: 1440px;
+}
+```
+
+Edit this file directly when adding breakpoints or other layout tokens.
+
+### By the numbers
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Count</th>
+      <th>%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Primitive tokens</td>
+      <td>71</td>
+      <td>31.7%</td>
+    </tr>
+    <tr>
+      <td>Semantic tokens</td>
+      <td>153</td>
+      <td>68.3%</td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td><strong>224</strong></td>
+      <td>100%</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## 4 — Component-Level Conventions
+
+When building components in cv-ui-kit, follow these conventions for CSS variables.
+
+### Use the `--cv-<component>-*` prefix
+
+Define component-scoped custom properties on the `.root` class. Their values should reference **semantic tokens**:
+
+```css
+/* PriorityCard.module.css */
+.root {
+  --cv-priority-card-border: var(--color-border-weaker);
+  --cv-priority-card-bg: var(--color-fill-common-default);
+  --cv-priority-card-text: var(--color-text-default);
+  --cv-priority-card-button-color: var(--color-text-secondary);
+
+  background: var(--cv-priority-card-bg);
+  border: 1px solid var(--cv-priority-card-border);
+  color: var(--cv-priority-card-text);
+}
+```
+
+This makes the component easily themeable — consumers can override `--cv-priority-card-bg` without touching the component source.
+
+### Provide fallbacks where appropriate
+
+Use the CSS `var()` fallback syntax for variables that may not be defined:
+
+```css
+/* LoadingSteps.module.css */
+.stepText {
+  font-family: var(--font-family-base, 'Roboto', sans-serif);
+}
+```
+
+```tsx
+// LoadingSteps.tsx — inline style with fallback
+color="var(--cv-loading-steps-accent, #006dcc)"
+```
+
+### Dynamic variables via React
+
+When component props need to drive CSS, set `--cv-*` variables through inline styles:
+
+```tsx
+// Switch.tsx — custom color support
+const customColorStyle = {
+  '--cv-switch-track-bg-checked': color,
+  '--cv-switch-track-border-checked': color,
+} as CSSProperties;
+
+<label style={customColorStyle}>...</label>
+```
+
+### What NOT to do
+
+```css
+/* WRONG — using primitive tokens directly */
+.root {
+  background: var(--neutrals-white-00);   /* use --color-background-default */
+  color: var(--neutrals-black-80);        /* use --color-text-default */
+  padding: var(--size-16);                /* use --spacing-m */
+  border-radius: var(--size-8);           /* use --corner-radius-s */
+  border-color: var(--brand-dark-50);     /* use --color-border-brand */
+}
+
+/* CORRECT — using semantic tokens */
+.root {
+  background: var(--color-background-default);
+  color: var(--color-text-default);
+  padding: var(--spacing-m);
+  border-radius: var(--corner-radius-s);
+  border-color: var(--color-border-brand);
+}
+```
+
+---
+
+## 5 — Overriding Tokens in Consumer Apps
+
+Because the design system is built entirely on CSS custom properties, downstream projects can customize the theme by redefining variables on `:root`.
+
+### Override a semantic token — scoped change
+
+```css
+:root {
+  --color-background-brand: #1a1a2e;
+}
+```
+
+This only affects background-brand usage, leaving other tokens that reference the same primitive untouched.
+
+### Override at component level
+
+```css
+.my-custom-button {
+  --cv-button-background: hotpink;
+  --cv-button-color: white;
+}
+```
+
+### How consumers import styles
+
+```tsx
+import '@npm_leadtech/cv-ui-kit/styles/design-system-tokens.css';
+
+// Then override tokens after the import:
+import './my-theme-overrides.css';
+```
+
+---
+
+## 6 — Step-by-Step Workflow
+
+When the design team updates tokens in Figma, follow these six steps:
+
+### Step 1 — Change in Figma
+
+The designer modifies variables in Figma (e.g. changes a brand color, adds a new spacing value).
+
+### Step 2 — Export JSON
+
+Export Figma Variables as JSON using the **Tokens Studio** plugin (DTCG format). The export produces a single JSON file with `$value`, `$type`, `$themes`, and `$metadata`.
+
+### Step 3 — Replace the source file
+
+Copy the exported JSON into the project, replacing:
+
+```
+src/styles/design-system-tokens/design-system-tokens.json
+```
+
+### Step 4 — Run the conversion
+
+```bash
+npm run convert-tokens
+```
+
+This executes `scripts/build-tokens.ts` via tsx, running the full Style Dictionary pipeline.
+
+### Step 5 — Review the diff
+
+Check the generated CSS file for expected changes:
+
+```bash
+git diff src/styles/design-system-tokens/design-system-tokens.css
+```
+
+Look for:
+- New variables that were added
+- Changed values (hex colors, px values, `var()` references)
+- Variables that were removed (may break components)
+
+### Step 6 — Commit both files
+
+Always commit the JSON source **and** the generated CSS together:
+
+```bash
+git add src/styles/design-system-tokens/design-system-tokens.json
+git add src/styles/design-system-tokens/design-system-tokens.css
+git commit -m "Update design tokens from Figma export"
+```
+
+> **Never edit `design-system-tokens.css` by hand.** It will be overwritten on the next conversion run.
+
+---
+
+## 7 — Tooling & Testing
+
+### Build stack
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://styledictionary.com/">Style Dictionary v4</a></td>
+      <td>Token build engine — reads JSON, applies transforms, outputs CSS</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/tokens-studio/sd-transforms">@tokens-studio/sd-transforms</a></td>
+      <td>Figma/Tokens Studio compatibility layer — strips metadata, resolves references</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/privatenumber/tsx">tsx</a></td>
+      <td>Runs the TypeScript build script directly</td>
+    </tr>
+  </tbody>
+</table>
+
+### Preprocessors
+
+**`filter-and-clean-tokens`** (custom) — runs first:
+1. Removes the "Screen resolutions" collection (designer-only, not needed in code)
+2. Tags each leaf token with `$extensions.category` (`'primitive'` or `'semantic'`) based on the top-level JSON key — "Color Primitives/\*" and "Size Primitives/\*" are primitive; all others (COLORS, TYPOGRAPHY, SPACING, CORNER RADIUS, ICONS) are semantic
+3. Cleans parenthetical annotations from keys and `$value` references:
+
+```
+"default (brand)"  →  "default"
+"{interactivity.states.default (brand)}"  →  "{interactivity.states.default}"
+```
+
+**`tokens-studio`** (from sd-transforms) — runs second:
+1. Strips `$themes` and `$metadata`
+2. With `excludeParentKeys: true`, removes Figma collection wrappers (`"Color Primitives/Mode 1"` → flat structure) so cross-collection references resolve correctly
+
+### Custom transforms
+
+**`name/readable-css`** — maps token paths to clean CSS variable names (see naming rules above).
+
+**`value/font-weight-numeric`** — converts Figma font weight names to CSS numeric values:
+
+```
+"Thin"       → "100"      "Medium"     → "500"
+"Regular"    → "400"      "Semi Bold"  → "600"
+"Light"      → "300"      "Bold"       → "700"
+```
+
+**`value/number-to-px`** — appends `px` to `$type: "number"` tokens. Figma exports sizes as `number` instead of `dimension`, so the built-in sd-transforms `ts/size/px` doesn't match them.
+
+### Custom format
+
+**`css/variables-two-roots`** — outputs a single CSS file with two `:root` blocks. It reads the `$extensions.category` tag set by the preprocessor and groups tokens accordingly: primitive tokens in the first block, semantic tokens in the second. Uses `createPropertyFormatter` from Style Dictionary utilities to preserve `var()` output references.
+
+### Unit & integration tests
+
+All transform logic is tested in `scripts/build-tokens.test.ts`:
+
+**Unit tests** cover every transform function:
+- `cleanAnnotations` — strips `(brand)` suffixes from keys and reference strings
+- `cleanSegment` — lowercases, trims, replaces whitespace with hyphens
+- `readableCssName` — verifies correct CSS variable name for every token category
+- `fontWeightToNumeric` — maps all weight names including compound forms (`Semi Bold`, `Extra Light`)
+- `isPrimitiveTokenSet` — correctly identifies primitive vs semantic set keys
+- `assignTokenCategories` — tags tokens with the correct category and preserves existing `$extensions`
+
+**Integration tests** read the generated `design-system-tokens.css` and verify:
+- Two `:root` blocks with section comments (primitive first, semantic second)
+- Primitive tokens (sizes, brand colors) in the first block, semantic tokens (colors, typography, spacing, etc.) in the second
+- Size primitives output with `px` values (`--size-0: 0px` through `--size-256: 256px`)
+- Color primitives output as hex values
+- Semantic tokens output with `var()` references
+- Typography, spacing, corner radius, and icon size tokens all present
+- No screen resolution variables in the output
+- Annotation cleaning works end-to-end (e.g. `--system-info-10` resolves to `var(--brand-light-10)`)
+
+Run the tests:
+
+```bash
+npm run test -- scripts/build-tokens.test.ts
+```
+
+---
+
+## 8 — Key Takeaways
+
+### File map — know what to touch
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Status</th>
+      <th>What to do</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>design-system-tokens.json</code></td>
+      <td>Replaced from Figma</td>
+      <td>Drop in the new export</td>
+    </tr>
+    <tr>
+      <td><code>design-system-tokens.css</code></td>
+      <td><strong>Auto-generated</strong></td>
+      <td><strong>Never edit</strong> — run <code>npm run convert-tokens</code></td>
+    </tr>
+    <tr>
+      <td><code>tokens.css</code></td>
+      <td>Manual</td>
+      <td>Edit directly for breakpoints and layout tokens</td>
+    </tr>
+    <tr>
+      <td><code>build-tokens.ts</code></td>
+      <td>Manual</td>
+      <td>Edit when adding new transform logic</td>
+    </tr>
+    <tr>
+      <td><code>build-tokens.transforms.ts</code></td>
+      <td>Manual</td>
+      <td>Edit when adding new naming rules or value transforms</td>
+    </tr>
+    <tr>
+      <td><code>build-tokens.test.ts</code></td>
+      <td>Manual</td>
+      <td>Update tests when changing transforms</td>
+    </tr>
+  </tbody>
+</table>
+
+### Where documentation lives
+
+<table>
+  <thead>
+    <tr>
+      <th>Document</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Token categories & usage</td>
+      <td><code>src/styles/README.md</code></td>
+    </tr>
+    <tr>
+      <td>Build script details</td>
+      <td><code>scripts/README.md</code></td>
+    </tr>
+    <tr>
+      <td>Project overview</td>
+      <td><code>README.md</code> (root)</td>
+    </tr>
+    <tr>
+      <td>Visual token explorer</td>
+      <td>Storybook → <strong>Design System > Design Tokens</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+### Common pitfalls
+
+1. **Editing the generated CSS** — Your changes will be lost on the next `npm run convert-tokens`.
+2. **Using primitive tokens in components** — Always use semantic tokens. Linting and code review should catch this.
+3. **Forgetting to commit both files** — Always commit the JSON and CSS together so the repo stays consistent.
+4. **Stale Storybook cache** — If tokens look wrong in Storybook after a conversion, restart the dev server.
+5. **New Figma collection not appearing** — Add a naming rule to `readableCssName` in `build-tokens.transforms.ts` and check the `filter-and-clean-tokens` preprocessor isn't filtering it out.
+
+### Quick reference commands
+
+```bash
+# Convert tokens (after replacing JSON)
+npm run convert-tokens
+
+# Start Storybook to preview tokens
+npm run dev
+
+# Run token pipeline tests
+npm run test -- scripts/build-tokens.test.ts
+
+# Check for type errors
+npm run typecheck
+```
+
+---
+
+## Questions?
+
+Bring your questions — the last 15 minutes are for open discussion.
+
+Useful starting points:
+- How do I add a completely new token category?
+- What happens if Figma renames a collection?
+- Can we support dark mode / multiple themes?
+- How do I debug a token that isn't resolving?

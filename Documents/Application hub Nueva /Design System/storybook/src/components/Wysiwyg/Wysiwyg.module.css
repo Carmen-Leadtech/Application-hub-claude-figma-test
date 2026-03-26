@@ -1,0 +1,13 @@
+.container {
+  position: relative;
+  padding: 0 1px;
+}
+
+.help {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-small-details-xs-captions);
+  margin: 6px 15px 0;
+  letter-spacing: 0.4px;
+  line-height: var(--line-height-small-details-xs-captions);
+  color: var(--color-text-disabled);
+}

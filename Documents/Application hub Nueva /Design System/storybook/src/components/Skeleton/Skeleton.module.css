@@ -1,0 +1,103 @@
+.root {
+  display: block;
+  background-color: rgb(0 0 0 / 0.11);
+  height: 1.2em;
+}
+
+/* Variants */
+.text {
+  height: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  transform-origin: 0 55%;
+  transform: scale(1, 0.6);
+  border-radius: var(--corner-radius-xs);
+
+  &::before {
+    content: '\00a0';
+  }
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.rectangular {
+  border-radius: 0;
+}
+
+.rounded {
+  border-radius: var(--corner-radius-s);
+}
+
+/* Animations */
+.pulse {
+  animation: pulse 2s ease-in-out 0.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.wave {
+  position: relative;
+  overflow: hidden;
+
+  /* Fix for Safari issue with overflow + border-radius */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(from var(--color-fill-common-default) r g b / 0.5),
+      transparent
+    );
+    animation: wave 2s linear 0.5s infinite;
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Children inferring */
+.withChildren > .childrenWrapper {
+  visibility: hidden;
+}
+
+.childrenWrapper {
+  display: inherit;
+}
+
+.fitContent {
+  max-width: fit-content;
+}
+
+.heightAuto {
+  height: auto;
+}

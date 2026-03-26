@@ -1,0 +1,368 @@
+.root {
+  padding: var(--spacing-xl);
+  background: var(--color-fill-common-default);
+  font-family: 'Roboto', sans-serif;
+  color: var(--color-text-default);
+}
+
+.header {
+  margin-bottom: var(--spacing-xxxl);
+}
+
+.title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 40px;
+  color: var(--color-text-default);
+  margin: 0 0 var(--spacing-m) 0;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  max-width: 800px;
+}
+
+.section {
+  margin-bottom: var(--spacing-xxxl);
+}
+
+.sectionTitle {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  color: var(--color-text-default);
+  margin: 0 0 var(--spacing-l) 0;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-border-weaker);
+}
+
+.subsection {
+  margin-bottom: var(--spacing-xl);
+}
+
+.subsectionTitle {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--color-text-default);
+  margin: 0 0 var(--spacing-m) 0;
+}
+
+/* Tier Groups — distinguish primitive from semantic tokens */
+.tierGroup {
+  margin-bottom: var(--spacing-xl);
+  padding-left: var(--spacing-m);
+  border-left: 3px solid transparent;
+}
+
+.tierGroup--primitive {
+  border-left-color: var(--color-border-weak);
+}
+
+.tierGroup--semantic {
+  border-left-color: var(--color-border-brand);
+}
+
+.tierHeader {
+  margin-bottom: var(--spacing-l);
+}
+
+.tierBadge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: var(--corner-radius-xs);
+  margin-bottom: var(--spacing-xxs-exception);
+}
+
+.tierBadge--primitive {
+  background: var(--color-fill-common-weak);
+  color: var(--color-text-default);
+}
+
+.tierBadge--semantic {
+  background: var(--color-fill-common-brand-weak);
+  color: var(--color-text-system-info);
+}
+
+.tierDescription {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xxs-exception) 0 0 0;
+}
+
+/* Resolved Value (shared across all token types) */
+.resolvedValue {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Color Swatches */
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-m);
+}
+
+.colorSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.colorBox {
+  height: 80px;
+  border-radius: var(--corner-radius-s);
+  border: 1px solid var(--color-border-weaker);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.colorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+}
+
+.colorName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+.colorToken {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-weaker);
+  padding: 2px 6px;
+  border-radius: var(--corner-radius-xs);
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Typography Examples */
+.typographyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.typographyExample {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-m);
+  background: var(--color-fill-common-weaker);
+  border-radius: var(--corner-radius-s);
+  border: 1px solid var(--color-border-weaker);
+}
+
+.typographyPreview {
+  color: var(--color-text-default);
+}
+
+.typographyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+}
+
+.typographyName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+.typographyToken {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-default);
+  padding: 2px 6px;
+  border-radius: var(--corner-radius-xs);
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Spacing Examples */
+.spacingGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.spacingExample {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-m);
+  background: var(--color-fill-common-weaker);
+  border-radius: var(--corner-radius-s);
+  border: 1px solid var(--color-border-weaker);
+}
+
+.spacingVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spacingBoxLeft,
+.spacingBoxRight {
+  width: 60px;
+  height: 40px;
+  background: var(--color-fill-common-brand);
+  border-radius: var(--corner-radius-xs);
+  flex-shrink: 0;
+}
+
+.spacingGap {
+  height: 40px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent calc(50% - 1px),
+    var(--color-fill-common-weak) calc(50% - 1px),
+    var(--color-fill-common-weak) calc(50% + 1px),
+    transparent calc(50% + 1px),
+    transparent 100%
+  );
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.spacingMeasurement {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-default);
+  padding: 2px var(--spacing-xxs-exception);
+  border-radius: var(--corner-radius-xs);
+  border: 1px solid var(--color-border-weaker);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.spacingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+}
+
+.spacingName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+.spacingToken {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-default);
+  padding: 2px 6px;
+  border-radius: var(--corner-radius-xs);
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Corner Radius Examples */
+.cornerRadiusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-m);
+}
+
+.cornerRadiusExample {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.cornerRadiusBox {
+  width: 80px;
+  height: 80px;
+  background: var(--color-fill-common-brand);
+  border: 1px solid var(--color-border-weaker);
+}
+
+.cornerRadiusInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+  text-align: center;
+}
+
+.cornerRadiusName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+.cornerRadiusToken {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-weaker);
+  padding: 2px 6px;
+  border-radius: var(--corner-radius-xs);
+  font-family: 'Courier New', monospace;
+}
+
+/* Icon Size Examples */
+.iconSizeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-m);
+}
+
+.iconSizeExample {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.iconSizeBox {
+  color: var(--color-text-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconSizeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs-exception);
+  text-align: center;
+}
+
+.iconSizeName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+.iconSizeToken {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-fill-common-weaker);
+  padding: 2px 6px;
+  border-radius: var(--corner-radius-xs);
+  font-family: 'Courier New', monospace;
+}

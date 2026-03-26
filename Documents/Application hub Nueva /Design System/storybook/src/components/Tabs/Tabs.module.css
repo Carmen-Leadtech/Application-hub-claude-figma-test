@@ -1,0 +1,24 @@
+.root {
+  position: relative;
+  display: flex;
+}
+
+.sizeS {
+  gap: var(--spacing-xs);
+}
+
+.sizeM {
+  gap: var(--spacing-m);
+}
+
+.indicator {
+  align-self: stretch;
+  background-color: var(--color-fill-common-brand);
+  border-radius: 1000px;
+  bottom: 0;
+  height: 4px;
+  position: absolute;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease;
+}

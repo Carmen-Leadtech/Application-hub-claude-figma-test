@@ -1,0 +1,408 @@
+---
+description: Templates, conventions, and checklist for creating new React components (file structure, props, CSS Modules, tests, and Storybook stories)
+alwaysApply: true
+---
+
+# Component Creation Rules - cv-ui-kit
+
+## File Structure
+
+When creating a new `ComponentName` component, create the following files in `src/components/ComponentName/`:
+
+```
+src/components/ComponentName/
+├── ComponentName.tsx           # Main component
+├── ComponentName.module.css    # CSS Modules styles
+├── ComponentName.test.tsx      # Vitest tests
+├── ComponentName.stories.tsx   # Storybook stories
+└── README.md                   # Component documentation (used by Storybook docs)
+```
+
+---
+
+## 1. Main Component (`ComponentName.tsx`)
+
+### Base Template
+
+```tsx
+import { HTMLAttributes } from 'react';
+
+import classNames from 'classnames';
+import { CvElement } from 'types/CvElement';
+
+import styles from './ComponentName.module.css';
+
+export interface ComponentNameProps extends HTMLAttributes<HTMLDivElement>, CvElement {
+  // Component-specific props
+  variant?: 'default' | 'alternative';
+}
+
+export const ComponentName = ({
+  'data-qa': dataQa,
+  children,
+  id,
+  variant = 'default',
+  ...rest
+}: ComponentNameProps) => {
+  return (
+    <div
+      className={classNames(styles.root, styles[variant])}
+      data-qa={dataQa || undefined}
+      id={id}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+### Component Conventions
+
+- **Interface**: Always name it `ComponentNameProps`
+- **Extends**: Extend `HTMLAttributes<HTMLElement>` and `CvElement`
+- **CvElement**: Provides `data-qa` and `id` for testing/QA
+- **data-qa**: Use `dataQa || undefined` to avoid empty attributes
+- **CSS Modules**: Import as `styles` and use `styles.root`, `styles[variant]`
+- **classNames**: Use the `classnames` library for conditional classes
+- **Spread props**: Always pass `...rest` to the root element
+- **Export**: Named export, no default export
+
+### Props Order in Destructuring
+
+1. `'data-qa': dataQa` (rename for internal use)
+2. `children` (if applicable)
+3. `id`
+4. Component-specific props (alphabetically)
+5. `...rest`
+
+---
+
+## 2. CSS Modules Styles (`ComponentName.module.css`)
+
+### Base Template
+
+```css
+.root {
+  /* CSS variables for theming (use semantic tokens only) */
+  --cv-component-name-bg: var(--color-background-default);
+  --cv-component-name-color: var(--color-text-default);
+
+  /* Base styles */
+  background: var(--cv-component-name-bg);
+  color: var(--cv-component-name-color);
+}
+
+/* Variants */
+.alternative {
+  --cv-component-name-bg: var(--color-fill-common-brand);
+  --cv-component-name-color: var(--color-text-inverted);
+}
+
+/* States */
+.root:hover {
+  /* hover styles */
+}
+
+.root:focus {
+  outline-offset: 4px;
+  outline: 2px solid var(--color-border-interactivity-default);
+}
+
+.root:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Boolean modifiers */
+.fullWidth {
+  width: 100%;
+}
+
+.disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+```
+
+### CSS Modules Conventions
+
+- **Root class**: Always use `.root` as the primary class
+- **Variants**: Separate classes applied via `styles[variant]`
+- **Modifiers**: Classes like `.fullWidth`, `.disabled`, `.checked`
+- **CSS Variables**: Use the `--cv-` prefix for component variables
+- **Fallbacks**: Always include fallback values in `var()` → `var(--token, #fallback)`
+- **Design tokens**: Use existing tokens (see "Semantic tokens only" below)
+- **CSS nesting**: Native nesting can be used for states (`:hover`, `:focus`, etc.)
+
+### Semantic tokens only — never use primitives
+
+**Rule:** In CSS modules, always use variables from **semantic** design tokens. Never reference **primitive** tokens directly. Semantic tokens are defined in `src/styles/design-system-tokens/design-system-tokens.css` and provide meaning (e.g. "default background", "brand border"); primitives are raw values (e.g. "brand dark 50", "size 16") and are an implementation detail.
+
+**Do NOT use (primitives):**
+- `--size-*` (e.g. `--size-4`, `--size-16`, `--size-24`)
+- `--brand-light-*`, `--brand-dark-*` (e.g. `--brand-dark-50`, `--brand-light-20`)
+- `--neutrals-*` (e.g. `--neutrals-black-80`, `--neutrals-light-10`)
+- `--system-error-*`, `--system-success-*`, `--system-warning-*`, `--system-info-*` (e.g. `--system-error-50`)
+- `--interactivity-states-*`, `--gradients-*`, `--font-family-*`, `--font-weight-*`
+
+**DO use (semantic tokens):**
+- **Colors:** `--color-background-*`, `--color-border-*`, `--color-icons-*`, `--color-text-*`, `--color-fill-*`  
+  Examples: `--color-text-default`, `--color-background-default`, `--color-fill-common-brand`, `--color-border-interactivity-default`, `--color-icons-brand`
+- **Spacing:** `--spacing-xs`, `--spacing-s-exception`, `--spacing-m`, `--spacing-l`, `--spacing-xl`, `--spacing-xxs-exception`, `--spacing-larger-*`
+- **Radii:** `--corner-radius-xs`, `--corner-radius-s`, `--corner-radius-m`, `--corner-radius-l`, `--corner-radius-xl`, `--corner-radius-xxl`
+- **Typography:** `--font-size-*`, `--line-height-*` (e.g. `--font-size-body-m-default`, `--line-height-body-m-default`)
+- **Icons:** `--icon-size-xs`, `--icon-size-s`, `--icon-size-m`, `--icon-size-l`, `--icon-size-xl`
+
+**Example — correct (semantic):**
+```css
+.root {
+  background: var(--color-background-default);
+  color: var(--color-text-default);
+  padding: var(--spacing-m);
+  border-radius: var(--corner-radius-s);
+  border: 1px solid var(--color-border-default);
+}
+```
+
+**Example — wrong (primitive):**
+```css
+.root {
+  background: var(--neutrals-white-00);        /* avoid: use --color-background-default */
+  color: var(--neutrals-black-80);             /* avoid: use --color-text-default */
+  padding: var(--size-16);                     /* avoid: use --spacing-m */
+  border-radius: var(--size-8);                 /* avoid: use --corner-radius-s */
+  border-color: var(--brand-dark-50);           /* avoid: use --color-border-brand or --color-fill-common-brand */
+}
+```
+
+---
+
+## 3. Tests (`ComponentName.test.tsx`)
+
+### Base Template
+
+```tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+
+import { ComponentName } from './ComponentName';
+
+describe('ComponentName Component', () => {
+  it('renders children correctly', () => {
+    render(<ComponentName>Content</ComponentName>);
+
+    expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('applies default classes', () => {
+    render(<ComponentName>Content</ComponentName>);
+
+    const element = screen.getByText('Content').closest('div');
+
+    expect(element?.className).toMatch(/root/);
+    expect(element?.className).toMatch(/default/);
+  });
+
+  it('applies variant class correctly', () => {
+    render(<ComponentName variant="alternative">Content</ComponentName>);
+
+    const element = screen.getByText('Content').closest('div');
+
+    expect(element?.className).toMatch(/alternative/);
+  });
+
+  it('sets data-qa attribute when provided', () => {
+    render(<ComponentName data-qa="test-qa">Content</ComponentName>);
+
+    expect(screen.getByText('Content').closest('div')).toHaveAttribute('data-qa', 'test-qa');
+  });
+
+  it('does not set data-qa attribute when not provided', () => {
+    render(<ComponentName>Content</ComponentName>);
+
+    expect(screen.getByText('Content').closest('div')).not.toHaveAttribute('data-qa');
+  });
+
+  it('sets id attribute when provided', () => {
+    render(<ComponentName id="test-id">Content</ComponentName>);
+
+    expect(screen.getByText('Content').closest('div')).toHaveAttribute('id', 'test-id');
+  });
+
+  it('passes additional props to root element', () => {
+    render(<ComponentName aria-label="Test label">Content</ComponentName>);
+
+    expect(screen.getByText('Content').closest('div')).toHaveAttribute('aria-label', 'Test label');
+  });
+});
+```
+
+### Test Conventions
+
+- **Framework**: Vitest + React Testing Library
+- **Describe**: Use `describe('ComponentName Component', ...)`
+- **Minimum tests**: Rendering, default classes, variants, data-qa, id, additional props
+- **Queries**: Prefer `getByRole`, `getByText`, `getByTestId`
+- **Class assertions**: Use `element?.className.toMatch(/pattern/)` for CSS Modules
+- **Assertions**: Use matchers from `@testing-library/jest-dom`
+- **vi.fn()**: For function mocks (NO `jest.fn()`)
+
+---
+
+## 4. Stories (`ComponentName.stories.tsx`)
+
+### Base Template
+
+```tsx
+import { Meta, StoryFn } from '@storybook/react';
+
+import { ComponentName, type ComponentNameProps } from './ComponentName';
+import README from './README.md?raw';
+
+export default {
+  title: 'Components/ComponentName',
+  component: ComponentName,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: README,
+      },
+    },
+  },
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'alternative'],
+      description: 'Visual style variant',
+      table: {
+        type: { summary: '"default" | "alternative"' },
+        defaultValue: { summary: '"default"' },
+      },
+    },
+  },
+} as Meta<typeof ComponentName>;
+
+const Template: StoryFn<ComponentNameProps> = (args) => <ComponentName {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  children: 'Content',
+};
+Default.parameters = {
+  docs: {
+    description: {
+      story: 'Default variant of the component.',
+    },
+  },
+};
+
+export const Alternative = Template.bind({});
+Alternative.args = {
+  children: 'Alternative content',
+  variant: 'alternative',
+};
+Alternative.parameters = {
+  docs: {
+    description: {
+      story: 'Alternative variant of the component.',
+    },
+  },
+};
+```
+
+### Story Conventions
+
+- **Meta title**: `'Components/ComponentName'`
+- **Template**: Use `StoryFn<ComponentNameProps>`
+- **README.md**: Import as raw string (`import README from './README.md?raw'`) and use as `parameters.docs.description.component` — do not write inline descriptions
+- **argTypes**: Define controls with descriptions and default values
+- **Stories**: One per important variant/state
+- **story.parameters.docs**: Individual description for each story
+- **Naming**: PascalCase (`Default`, `Alternative`, `WithIcon`)
+
+---
+
+## 5. Export the Component
+
+After creating the component, add the export in `src/components/index.ts`:
+
+```ts
+export { ComponentName } from './ComponentName/ComponentName';
+```
+
+If you need to export additional types:
+
+```ts
+export { ComponentName, type ComponentNameProps } from './ComponentName/ComponentName';
+```
+
+### Export Order
+
+Keep alphabetical order in the `index.ts` file.
+
+---
+
+## Creation Checklist
+
+- [ ] Create folder `src/components/ComponentName/`
+- [ ] Create `ComponentName.tsx` with interface and component
+- [ ] Create `ComponentName.module.css` with styles
+- [ ] Create `ComponentName.test.tsx` with basic tests
+- [ ] Create `ComponentName.stories.tsx` with stories
+- [ ] Create `README.md` with component documentation
+- [ ] Add export in `src/components/index.ts`
+- [ ] Run `npm run lint:fix` to format
+- [ ] Run `npm run test` to verify tests
+- [ ] Run `npm run typecheck` to verify types
+- [ ] Check in Storybook (`npm run dev`)
+
+---
+
+## Additional Patterns
+
+### Component with multiple sizes
+
+```tsx
+// Props
+size?: 'S' | 'M' | 'L';
+
+// Usage with CSS Modules
+className={classNames(styles.root, styles[size])}
+```
+
+```css
+/* CSS */
+.S {
+  font-size: 14px;
+  padding: var(--padding-tb-xs, 4px) var(--padding-rl-m, 16px);
+}
+
+.M {
+  font-size: 16px;
+  padding: var(--padding-tb-s, 8px) var(--padding-rl-m, 16px);
+}
+```
+
+### Component with controlled/uncontrolled state
+
+```tsx
+const [internalValue, setInternalValue] = useState(defaultValue);
+
+const isControlled = value !== undefined;
+const currentValue = isControlled ? value : internalValue;
+
+const handleChange = (newValue: Type) => {
+  if (!isControlled) setInternalValue(newValue);
+  onChange?.(newValue);
+};
+```
+
+### data-qa with suffixes
+
+```tsx
+// For complex components, add descriptive suffixes
+data-qa={dataQa ? `${dataQa}-button` : undefined}
+data-qa={dataQa ? `${dataQa}-label` : undefined}
+data-qa={dataQa ? `${dataQa}-icon` : undefined}
+```

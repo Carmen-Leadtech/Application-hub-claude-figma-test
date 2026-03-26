@@ -1,0 +1,236 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-body);
+  row-gap: var(--spacing-m);
+  width: 100%;
+}
+
+.fullHeight {
+  height: 100%;
+
+  & .dropzone {
+    height: 100%;
+  }
+}
+
+.dropzone {
+  align-items: center;
+  background: var(--color-fill-common-weaker);
+  border-radius: var(--corner-radius-xl);
+  border: 2px dashed #b5babd;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  padding: var(--spacing-xl);
+  position: relative;
+  transition: background 300ms ease-in-out;
+  width: 100%;
+
+  &:hover {
+    background: rgb(225 241 253 / 0.5);
+    border-color: #70bcff;
+  }
+}
+
+.dropzoneDragActive {
+  background: rgb(225 241 253 / 0.5);
+  border-color: #70bcff;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  padding-bottom: var(--spacing-xl);
+}
+
+.iconText {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.iconTextHorizontal {
+  flex-direction: row;
+}
+
+.fileContent {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  height: 100%;
+  justify-content: center;
+  max-height: 280px;
+  min-width: 280px;
+}
+
+.textWrapper {
+  color: #5a5e61;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-body-m-default);
+  font-weight: var(--font-weight-default);
+  line-height: var(--line-height-body-m-default);
+  row-gap: var(--spacing-xxs-exception);
+}
+
+.title {
+  font-weight: bold;
+  text-align: center;
+}
+
+.titleHorizontal {
+  text-align: left;
+}
+
+.action {
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-default);
+  line-height: var(--line-height-small-details-xs-captions);
+  text-align: center;
+
+  & strong {
+    color: var(--color-text-interactivity-default);
+  }
+}
+
+.actionHorizontal {
+  text-align: left;
+}
+
+.status {
+  align-items: flex-start;
+  column-gap: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.statusError {
+  color: #f2612c;
+}
+
+.statusSuccess {
+  color: var(--color-text-system-success);
+}
+
+.progress {
+  animation: wrapperAnimation 1000ms;
+  border-radius: 54px;
+  border: 1px solid var(--color-border-interactivity-default);
+  display: flex;
+  height: 4px;
+  width: 100%;
+}
+
+.progressError {
+  border-color: #f2612c;
+}
+
+.progressSuccess {
+  border-color: #00b786;
+}
+
+.progressDefault .progressInner {
+  background: var(--color-fill-interactivity-default);
+  width: 0;
+}
+
+.progressError .progressInner {
+  background: #f2612c;
+  width: 100%;
+}
+
+.progressSuccess .progressInner {
+  background: var(--color-fill-system-success-strong);
+  width: 100%;
+}
+
+.progressInner {
+  animation: innerAnimation 1000ms;
+  display: flex;
+}
+
+@keyframes wrapperAnimation {
+  0%,
+  75% {
+    border: 1px solid var(--color-border-interactivity-default);
+  }
+}
+
+@keyframes innerAnimation {
+  0% {
+    background: var(--color-fill-interactivity-default);
+    width: 0;
+  }
+
+  75% {
+    background: var(--color-fill-interactivity-default);
+    width: 75%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.statusIcon {
+  display: flex;
+
+  & svg {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.statusIconSuccess svg * {
+  fill: var(--color-icons-system-success);
+}
+
+.statusIconError svg * {
+  fill: #f2612c;
+}
+
+.statusText {
+  font-size: var(--font-size-small-details-xs-captions);
+  font-weight: var(--font-weight-strong);
+  letter-spacing: 0.4px;
+  line-height: var(--line-height-small-details-xs-captions);
+  margin: 0;
+  padding: 0;
+}
+
+.statusTextError {
+  color: #bb441a;
+}
+
+.statusTextSuccess {
+  color: var(--color-text-system-success);
+}
+
+.info {
+  align-items: center;
+  bottom: 24px;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-small-details-xs-captions);
+  font-weight: var(--font-weight-strong);
+  letter-spacing: 0.4px;
+  line-height: var(--line-height-small-details-xs-captions);
+  position: absolute;
+}
+
+.infoFormat,
+.infoSize {
+  margin: 0;
+  padding: 0;
+}

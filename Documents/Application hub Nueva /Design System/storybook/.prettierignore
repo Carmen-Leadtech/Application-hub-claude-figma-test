@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# Test coverage
+coverage/
+
+# Storybook
+storybook-static/
+
+# Yalc
+.yalc/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

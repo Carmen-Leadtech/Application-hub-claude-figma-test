@@ -1,0 +1,53 @@
+---
+description: Enforce English as the language for all project documentation
+alwaysApply: true
+---
+
+# Documentation Language
+
+All project documentation **must be written in English**. This applies to:
+
+- Code comments (inline and block)
+- JSDoc / TSDoc annotations
+- README files
+- Storybook story descriptions, `argTypes` descriptions, and component docs
+- Git commit messages
+- Pull request titles and descriptions
+- Changelog entries
+- Cursor rules and any other developer-facing text
+
+## Translation
+
+If documentation, comments, or any developer-facing text is submitted in a language other than English, **automatically translate it to English** before applying or committing the changes. Do not ask for confirmation — just translate and use the English version.
+
+## Examples
+
+```tsx
+// ❌ BAD
+/** Componente de botón con variantes de estilo */
+export const Button = () => { ... };
+
+// ✅ GOOD
+/** Button component with style variants */
+export const Button = () => { ... };
+```
+
+```tsx
+// ❌ BAD - Storybook description in Spanish
+parameters: {
+  docs: {
+    description: {
+      component: 'Botón con múltiples variantes y tamaños',
+    },
+  },
+}
+
+// ✅ GOOD - Storybook description in English
+parameters: {
+  docs: {
+    description: {
+      component: 'Button with multiple variants and sizes',
+    },
+  },
+}
+```

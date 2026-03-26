@@ -1,0 +1,20 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+
+  & svg {
+    /* TODO: Forced 100% width and height causes a bug when wrapping the icon in a flex container */
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    display: block;
+  }
+}
+
+.iconMask {
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}

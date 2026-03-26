@@ -1,0 +1,84 @@
+/* Root container */
+.root {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+/* Variant - Primary (default) */
+.primary {
+  color: var(--color-text-interactivity-default);
+}
+
+.primary:not(.disabled):hover {
+  color: var(--color-text-interactivity-hover);
+}
+
+/* Sizes */
+.medium {
+  font-size: var(--font-size-body-m-default);
+}
+
+.small {
+  font-size: var(--font-size-body-s);
+}
+
+.disabled {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Text */
+.text {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  line-height: var(--line-height-body-s);
+  color: inherit;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Icon Container */
+.iconContainer {
+  display: flex;
+  align-items: center;
+}
+
+/* Icon positioned before text */
+.iconContainer:first-child {
+  margin-right: var(--spacing-xs);
+}
+
+/* Icon positioned after text */
+.iconContainer:last-child {
+  margin-left: var(--spacing-xs);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Hover effects are handled by the CSS custom property above */
+
+/* Focus States for Accessibility */
+.root:focus {
+  outline: 2px solid var(--color-border-interactivity-default);
+  outline-offset: 2px;
+  border-radius: var(--corner-radius-xs);
+}
+
+.root:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Active State - removed translateY to prevent movement */
+
+/* Ensure proper alignment */
+.root > * {
+  flex-shrink: 0;
+}

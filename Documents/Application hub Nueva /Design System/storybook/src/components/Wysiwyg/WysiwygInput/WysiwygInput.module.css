@@ -1,0 +1,80 @@
+.container {
+  background: white;
+  border-radius: var(--corner-radius-xs);
+  position: relative;
+
+  & p,
+  & ul,
+  & ol {
+    margin: 0;
+  }
+}
+
+.dark {
+  background: var(--color-fill-common-weaker);
+}
+
+.input {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-m-default);
+  line-height: var(--line-height-body-s);
+  color: #3b3d40;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  min-height: 60px;
+  padding: 15px;
+  padding-bottom: var(--spacing-xs);
+  outline: none;
+}
+
+.bar {
+  padding: 0 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--color-border-weaker);
+}
+
+.buttonContainer {
+  min-height: 48px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing-s-exception) 0;
+  box-sizing: border-box;
+}
+
+.button {
+  margin-right: var(--spacing-xs);
+  padding: 0;
+  cursor: pointer;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--corner-radius-xs);
+  color: var(--color-text-secondary);
+  background-color: transparent;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.buttonSelected {
+  border-color: var(--color-border-interactivity-default);
+}
+
+.suffixContainer {
+  color: var(--color-text-interactivity-default);
+  text-align: end;
+  padding-right: 14px;
+  padding-bottom: 14px;
+  height: 24px;
+  visibility: hidden;
+}
+
+.suffixVisible {
+  visibility: visible;
+}

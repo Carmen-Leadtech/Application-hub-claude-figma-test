@@ -1,0 +1,39 @@
+.root {
+  border-radius: var(--corner-radius-s);
+  display: inline-flex;
+  font-family: var(--font-family-small-details);
+  font-size: var(--font-size-small-details-xs-captions);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: var(--line-height-small-details-xs-captions);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.background {
+  padding: var(--spacing-xxs-exception) var(--spacing-xs);
+}
+
+.success {
+  color: var(--color-text-system-success);
+
+  &.background {
+    background-color: #a2edda;
+  }
+}
+
+.warning {
+  color: #b34d00;
+
+  &.background {
+    background-color: #ffebb3;
+  }
+}
+
+.danger {
+  color: #bb441a;
+
+  &.background {
+    background-color: #fdcfbf;
+  }
+}

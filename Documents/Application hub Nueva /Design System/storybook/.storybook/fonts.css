@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'Roboto';
+  src:
+    url('./fonts/Roboto-Regular.woff2') format('woff2'),
+    url('./fonts/Roboto-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:
+    url('./fonts/Roboto-Medium.woff2') format('woff2'),
+    url('./fonts/Roboto-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply Roboto globally in Storybook */
+body,
+#storybook-root,
+.sb-show-main {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Ensure all elements inherit the font */
+* {
+  font-family: inherit;
+}

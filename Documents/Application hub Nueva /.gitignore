@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Lock files (use one package manager)
+package-lock.json
+bun.lock
+bun.lockb
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code config
+.claude/
+
+# PDFs / local docs
+CV-*.pdf
+*.pdf
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,432 @@
+---
+description: Detect primitive style values (hex, rgb, px) and primitive CSS variable references in CSS/SCSS/TypeScript files; suggest semantic Design Token replacements
+alwaysApply: true
+---
+
+# Semantic Design Tokens — Primitives vs Semantic Variables
+
+## Purpose
+
+Every style property in component files **must** use **semantic** design tokens. Never use hard-coded color/size values or references to **primitive** CSS variables. Semantic tokens carry intent (e.g. "default background", "brand border") while primitives are raw values (e.g. "brand dark 50", "size 16") that may change without notice.
+
+This rule applies to **CSS Modules** (`.module.css`), **SCSS** (`.scss`), and **TypeScript** files that contain inline styles or CSS-in-JS patterns.
+
+---
+
+## What to detect
+
+### A. Hard-coded primitive values
+
+Flag any of the following when used as style values:
+
+| Pattern                    | Examples                                         |
+| -------------------------- | ------------------------------------------------ |
+| Hex colors                 | `#fff`, `#ffffff`, `#006dcc`, `#27292a`          |
+| RGB / RGBA                 | `rgb(0, 109, 204)`, `rgba(255, 255, 255, 0.5)`   |
+| HSL / HSLA                 | `hsl(207, 100%, 40%)`, `hsla(0, 0%, 100%, 0.8)`  |
+| Raw px for spacing         | `padding: 16px`, `margin: 8px 24px`, `gap: 12px` |
+| Raw px for border-radius   | `border-radius: 8px`                             |
+| Raw px for font-size       | `font-size: 14px`                                |
+| Raw px for line-height     | `line-height: 24px`                              |
+| Raw px for icon dimensions | `width: 24px; height: 24px` (on icon wrappers)   |
+
+### B. Primitive CSS variable references
+
+Flag `var()` calls that reference variables from the **primitive** `:root` block in `design-system-tokens.css`:
+
+| Primitive prefix           | Examples                                               |
+| -------------------------- | ------------------------------------------------------ |
+| `--size-*`                 | `var(--size-4)`, `var(--size-16)`, `var(--size-24)`    |
+| `--brand-light-*`          | `var(--brand-light-10)`, `var(--brand-light-20)`       |
+| `--brand-dark-*`           | `var(--brand-dark-50)`, `var(--brand-dark-60)`         |
+| `--neutrals-*`             | `var(--neutrals-white-00)`, `var(--neutrals-black-80)` |
+| `--system-error-*`         | `var(--system-error-10)`, `var(--system-error-50)`     |
+| `--system-success-*`       | `var(--system-success-10)`, `var(--system-success-50)` |
+| `--system-warning-*`       | `var(--system-warning-10)`, `var(--system-warning-50)` |
+| `--system-info-*`          | `var(--system-info-10)`, `var(--system-info-50)`       |
+| `--interactivity-states-*` | `var(--interactivity-states-default)`                  |
+| `--gradients-*`            | `var(--gradients-gradient-1-stop-1)`                   |
+
+> **Note:** `--font-family-*` and `--font-weight-*` exist in both the primitive and semantic blocks. Always use the **semantic** versions (`--font-family-heading`, `--font-family-body`, `--font-family-small-details`, `--font-weight-strong`, `--font-weight-default`).
+
+---
+
+## Available semantic tokens (complete reference)
+
+All tokens below are defined in `src/styles/design-system-tokens/design-system-tokens.css` (semantic `:root` block). Use **only** these in component styles.
+
+### Colors
+
+**Background** (`--color-background-*`):
+`brand`, `default`, `weaker`, `weakest`, `stronger`, `strong`, `strongest`
+
+**Border** (`--color-border-*`):
+`brand`, `default`, `strong`, `weaker`, `weak`, `inverted`, `brand-weak`,
+`system-error`, `system-success`, `system-warning`, `system-info`,
+`interactivity-default`, `interactivity-hover`, `interactivity-pressed`, `interactivity-disabled`
+
+**Icons** (`--color-icons-*`):
+`brand`, `default`, `weak`, `strongest`, `inverted`, `disabled`, `brand-weaker`,
+`system-error`, `system-success`, `system-warning`, `system-info`,
+`interactivity-default`, `interactivity-hover`, `interactivity-pressed`, `interactivity-disabled`
+
+**Text** (`--color-text-*`):
+`default`, `inverted`, `brand`, `secondary`, `disabled`,
+`system-error`, `system-success`, `system-warning`, `system-info`,
+`interactivity-default`, `interactivity-hover`, `interactivity-pressed`, `interactivity-disabled`
+
+**Fill** (`--color-fill-*`):
+
+- Common: `common-default`, `common-weaker`, `common-weak`, `common-strong`, `common-stronger`, `common-strongest`, `common-brand`, `common-brand-weak`
+- Gradients: `gradients-highlight-stop-1`, `gradients-highlight-stop-2`
+- Illustrations: `illustrations-brand-weak-4` through `illustrations-brand-weak-1`, `illustrations-brand`, `illustrations-brand-strong-1` through `illustrations-brand-strong-3`
+- System: `system-error-weak`, `system-error-strong`, `system-success-weak`, `system-success-strong`, `system-warning-weak`, `system-warning-strong`, `system-info-weak`, `system-info-strong`
+- Interactivity: `interactivity-default`, `interactivity-hover`, `interactivity-pressed`, `interactivity-disabled`
+
+### Typography
+
+**Font family:** `--font-family-heading`, `--font-family-body`, `--font-family-small-details`
+
+**Font weight:** `--font-weight-strong` (500), `--font-weight-default` (400)
+
+**Font size** (`--font-size-*`):
+`titles-xxl` (48px), `titles-xl` (32px), `titles-l` (24px), `titles-m` (20px), `titles-s` (16px), `titles-xs` (12px),
+`body-m-default` (16px), `body-s` (14px),
+`small-details-xs-captions` (12px), `small-details-xxs` (10px)
+
+**Line height** (`--line-height-*`):
+`titles-xxl` (56px), `titles-xl` (40px), `titles-l` (32px), `titles-m` (28px), `titles-s` (24px), `titles-xs` (20px),
+`body-m-default` (24px), `body-s` (20px),
+`small-details-xs-captions` (16px), `small-details-xxs` (16px)
+
+### Spacing
+
+| Token                                              | Resolved value                         |
+| -------------------------------------------------- | -------------------------------------- |
+| `--spacing-xxs-exception`                          | 4px                                    |
+| `--spacing-xs`                                     | 8px                                    |
+| `--spacing-s-exception`                            | 12px                                   |
+| `--spacing-m`                                      | 16px                                   |
+| `--spacing-l`                                      | 24px                                   |
+| `--spacing-xl`                                     | 32px                                   |
+| `--spacing-xxl`                                    | 40px                                   |
+| `--spacing-xxxl`                                   | 48px                                   |
+| `--spacing-larger-1` through `--spacing-larger-26` | 56px through 256px (increments of 8px) |
+
+### Corner radius
+
+| Token                 | Resolved value |
+| --------------------- | -------------- |
+| `--corner-radius-xs`  | 4px            |
+| `--corner-radius-s`   | 8px            |
+| `--corner-radius-m`   | 12px           |
+| `--corner-radius-l`   | 16px           |
+| `--corner-radius-xl`  | 24px           |
+| `--corner-radius-xxl` | 32px           |
+
+### Icon sizes
+
+| Token            | Resolved value |
+| ---------------- | -------------- |
+| `--icon-size-xs` | 16px           |
+| `--icon-size-s`  | 20px           |
+| `--icon-size-m`  | 24px           |
+| `--icon-size-l`  | 32px           |
+| `--icon-size-xl` | 48px           |
+
+---
+
+## Primitive-to-semantic quick-reference
+
+When you encounter a primitive, choose the semantic token that matches the **intent** of the property.
+
+### Hard-coded hex colors
+
+| Hex value | Primitive variable              | Semantic replacement (choose by context)                                                                                                     |
+| --------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#006dcc` | `--brand-dark-50`               | `--color-background-brand`, `--color-border-brand`, `--color-text-brand`, `--color-fill-common-brand`, `--color-icons-brand`                 |
+| `#0057a3` | `--brand-dark-60`               | `--color-fill-illustrations-brand-strong-1`                                                                                                  |
+| `#00417a` | `--brand-dark-70`               | `--color-fill-illustrations-brand-strong-2`                                                                                                  |
+| `#002c52` | `--brand-dark-80`               | `--color-fill-illustrations-brand-strong-3`                                                                                                  |
+| `#ebf6ff` | `--brand-light-10`              | `--color-fill-common-brand-weak`, `--color-icons-brand-weaker`                                                                               |
+| `#c2e2ff` | `--brand-light-20`              | `--color-border-brand-weak`, `--color-fill-illustrations-brand-weak-3`                                                                       |
+| `#70bcff` | `--brand-light-30`              | `--color-fill-illustrations-brand-weak-2`                                                                                                    |
+| `#1f96ff` | `--brand-light-40`              | `--color-fill-illustrations-brand-weak-1`                                                                                                    |
+| `#ffffff` | `--neutrals-white-00`           | `--color-background-default`, `--color-text-inverted`, `--color-border-inverted`, `--color-fill-common-default`, `--color-icons-inverted`    |
+| `#f3f5f6` | `--neutrals-light-10`           | `--color-background-weakest`, `--color-fill-common-weaker`                                                                                   |
+| `#dee1e3` | `--neutrals-light-20`           | `--color-background-weaker`, `--color-border-weaker`, `--color-fill-common-weak`, `--color-icons-disabled`                                   |
+| `#b5b8ba` | `--neutrals-light-30`           | `--color-border-weak`, `--color-icons-weak`, `--color-text-disabled`                                                                         |
+| `#8a8f93` | `--neutrals-dark-40`            | `--color-background-strong`, `--color-fill-common-strong`                                                                                    |
+| `#767b7f` | `--neutrals-dark-50`            | `--color-border-strong`, `--color-icons-default`                                                                                             |
+| `#62666a` | `--neutrals-dark-60`            | `--color-background-stronger`, `--color-fill-common-stronger`, `--color-text-secondary`                                                      |
+| `#3b3d40` | `--neutrals-dark-70`            | (no direct semantic — check design intent)                                                                                                   |
+| `#27292a` | `--neutrals-black-80`           | `--color-background-strongest`, `--color-border-default`, `--color-text-default`, `--color-fill-common-strongest`, `--color-icons-strongest` |
+| `#faeae8` | `--system-error-10`             | `--color-fill-system-error-weak`                                                                                                             |
+| `#f15e29` | `--system-error-50`             | `--color-icons-system-error`, `--color-fill-system-error-strong`                                                                             |
+| `#c23200` | `--system-error-100`            | `--color-border-system-error`, `--color-text-system-error`                                                                                   |
+| `#daf8f1` | `--system-success-10`           | `--color-fill-system-success-weak`                                                                                                           |
+| `#00b786` | `--system-success-50`           | `--color-icons-system-success`, `--color-fill-system-success-strong`                                                                         |
+| `#00693c` | `--system-success-100`          | `--color-border-system-success`, `--color-text-system-success`                                                                               |
+| `#fff8e1` | `--system-warning-10`           | `--color-fill-system-warning-weak`                                                                                                           |
+| `#ffbf06` | `--system-warning-50`           | `--color-icons-system-warning`, `--color-fill-system-warning-strong`                                                                         |
+| `#be5200` | `--system-warning-100`          | `--color-border-system-warning`, `--color-text-system-warning`                                                                               |
+| `#d21fff` | `--gradients-gradient-1-stop-1` | `--color-fill-gradients-highlight-stop-1`                                                                                                    |
+
+### Size primitives (px → semantic by property)
+
+| px value       | `--size-*`               | For spacing                                | For border-radius     | For font-size                                                    | For line-height                                                              | For icon size    |
+| -------------- | ------------------------ | ------------------------------------------ | --------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------- |
+| `4px`          | `--size-4`               | `--spacing-xxs-exception`                  | `--corner-radius-xs`  | —                                                                | —                                                                            | —                |
+| `8px`          | `--size-8`               | `--spacing-xs`                             | `--corner-radius-s`   | —                                                                | —                                                                            | —                |
+| `10px`         | `--size-10`              | —                                          | —                     | `--font-size-small-details-xxs`                                  | —                                                                            | —                |
+| `12px`         | `--size-12`              | `--spacing-s-exception`                    | `--corner-radius-m`   | `--font-size-titles-xs`, `--font-size-small-details-xs-captions` | —                                                                            | —                |
+| `14px`         | `--size-14`              | —                                          | —                     | `--font-size-body-s`                                             | —                                                                            | —                |
+| `16px`         | `--size-16`              | `--spacing-m`                              | `--corner-radius-l`   | `--font-size-titles-s`, `--font-size-body-m-default`             | `--line-height-small-details-xs-captions`, `--line-height-small-details-xxs` | `--icon-size-xs` |
+| `20px`         | `--size-20`              | —                                          | —                     | `--font-size-titles-m`                                           | `--line-height-titles-xs`, `--line-height-body-s`                            | `--icon-size-s`  |
+| `24px`         | `--size-24`              | `--spacing-l`                              | `--corner-radius-xl`  | `--font-size-titles-l`                                           | `--line-height-titles-s`, `--line-height-body-m-default`                     | `--icon-size-m`  |
+| `28px`         | `--size-28`              | —                                          | —                     | —                                                                | `--line-height-titles-m`                                                     | —                |
+| `32px`         | `--size-32`              | `--spacing-xl`                             | `--corner-radius-xxl` | `--font-size-titles-xl`                                          | `--line-height-titles-l`                                                     | `--icon-size-l`  |
+| `40px`         | `--size-40`              | `--spacing-xxl`                            | —                     | —                                                                | `--line-height-titles-xl`                                                    | —                |
+| `48px`         | `--size-48`              | `--spacing-xxxl`                           | —                     | `--font-size-titles-xxl`                                         | —                                                                            | `--icon-size-xl` |
+| `56px`         | `--size-56`              | `--spacing-larger-1`                       | —                     | —                                                                | `--line-height-titles-xxl`                                                   | —                |
+| `64px`–`256px` | `--size-64`–`--size-256` | `--spacing-larger-2`–`--spacing-larger-26` | —                     | —                                                                | —                                                                            | —                |
+
+---
+
+## Examples
+
+### CSS Modules (`.module.css`)
+
+**Bad — hard-coded values:**
+
+```css
+.root {
+  background: #ffffff;
+  color: #27292a;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #dee1e3;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+```
+
+**Good — semantic tokens:**
+
+```css
+.root {
+  background: var(--color-background-default);
+  color: var(--color-text-default);
+  padding: var(--spacing-m);
+  border-radius: var(--corner-radius-s);
+  border: 1px solid var(--color-border-weaker);
+  font-size: var(--font-size-body-s);
+  line-height: var(--line-height-body-s);
+}
+
+.icon {
+  width: var(--icon-size-m);
+  height: var(--icon-size-m);
+}
+```
+
+---
+
+**Bad — primitive variable references:**
+
+```css
+.card {
+  background: var(--neutrals-white-00);
+  color: var(--neutrals-black-80);
+  padding: var(--size-16);
+  border-radius: var(--size-8);
+  border-color: var(--brand-dark-50);
+  gap: var(--size-8);
+}
+
+.card:hover {
+  border-color: var(--interactivity-states-hover);
+}
+
+.errorMessage {
+  color: var(--system-error-100);
+  background: var(--system-error-10);
+}
+```
+
+**Good — semantic tokens:**
+
+```css
+.card {
+  background: var(--color-background-default);
+  color: var(--color-text-default);
+  padding: var(--spacing-m);
+  border-radius: var(--corner-radius-s);
+  border-color: var(--color-border-brand);
+  gap: var(--spacing-xs);
+}
+
+.card:hover {
+  border-color: var(--color-border-interactivity-hover);
+}
+
+.errorMessage {
+  color: var(--color-text-system-error);
+  background: var(--color-fill-system-error-weak);
+}
+```
+
+---
+
+### SCSS files (`.scss`)
+
+**Bad:**
+
+```scss
+.wrapper {
+  padding: 24px;
+  background-color: #f3f5f6;
+
+  .title {
+    font-size: 32px;
+    line-height: 40px;
+    color: #006dcc;
+  }
+}
+```
+
+**Good:**
+
+```scss
+.wrapper {
+  padding: var(--spacing-l);
+  background-color: var(--color-background-weakest);
+
+  .title {
+    font-size: var(--font-size-titles-xl);
+    line-height: var(--line-height-titles-xl);
+    color: var(--color-text-brand);
+  }
+}
+```
+
+---
+
+### TypeScript inline styles / CSS-in-JS
+
+**Bad:**
+
+```tsx
+<div style={{ padding: '16px', color: '#27292a', backgroundColor: '#ffffff' }}>
+  Content
+</div>
+```
+
+**Good:**
+
+```tsx
+<div
+  style={{
+    padding: 'var(--spacing-m)',
+    color: 'var(--color-text-default)',
+    backgroundColor: 'var(--color-background-default)',
+  }}
+>
+  Content
+</div>
+```
+
+---
+
+### Shorthand properties
+
+**Bad:**
+
+```css
+.box {
+  border: 1px solid #b5b8ba;
+  padding: 8px 16px;
+  margin: 0 24px 16px;
+}
+```
+
+**Good:**
+
+```css
+.box {
+  border: 1px solid var(--color-border-weak);
+  padding: var(--spacing-xs) var(--spacing-m);
+  margin: 0 var(--spacing-l) var(--spacing-m);
+}
+```
+
+---
+
+### Component-scoped CSS variables (`--cv-*`)
+
+Component variables should reference semantic tokens, not primitives:
+
+**Bad:**
+
+```css
+.root {
+  --cv-card-bg: var(--neutrals-white-00);
+  --cv-card-border: var(--brand-dark-50);
+  --cv-card-padding: var(--size-16);
+}
+```
+
+**Good:**
+
+```css
+.root {
+  --cv-card-bg: var(--color-background-default);
+  --cv-card-border: var(--color-border-brand);
+  --cv-card-padding: var(--spacing-m);
+}
+```
+
+---
+
+## Exceptions (where primitives are allowed)
+
+The following cases are **not** violations:
+
+| Case                                 | Rationale                                               | Example                                       |
+| ------------------------------------ | ------------------------------------------------------- | --------------------------------------------- |
+| `0` / `0px`                          | Zero needs no token                                     | `margin: 0`, `padding: 0px`                   |
+| `1px` in borders                     | No spacing token for 1px                                | `border: 1px solid var(...)`                  |
+| `2px` in outlines                    | No spacing token for 2px                                | `outline: 2px solid var(...)`                 |
+| CSS keywords                         | Not tokenizable                                         | `auto`, `inherit`, `initial`, `unset`, `none` |
+| Percentages                          | Layout-specific                                         | `width: 100%`, `top: 50%`                     |
+| Viewport units                       | Layout-specific                                         | `100vh`, `100vw`, `100dvh`                    |
+| Opacity values                       | Numeric 0–1                                             | `opacity: 0.5`                                |
+| Z-index values                       | Stacking integers                                       | `z-index: 10`                                 |
+| Transition / animation               | Durations and easings                                   | `transition: 0.2s ease`, `300ms`              |
+| `var()` fallbacks                    | Hard-coded fallback inside `var()` is acceptable        | `var(--color-text-default, #27292a)`          |
+| `calc()` with tokens                 | Arithmetic on semantic tokens is fine                   | `calc(var(--spacing-m) + var(--spacing-xs))`  |
+| `design-system-tokens.css`           | Auto-generated file; do not modify                      | Entire file is excluded                       |
+| `tokens.css`                         | Manual breakpoint tokens (`--bp-*`)                     | `--bp-sm: 768px`                              |
+| SVG attributes                       | `viewBox`, `d`, `points`, etc.                          | `viewBox="0 0 24 24"`                         |
+| Media queries with `--bp-*`          | Breakpoint tokens are not design tokens                 | `@media (min-width: 768px)`                   |
+| `max-width` / `min-width` on layouts | Container constraints without a design token equivalent | `max-width: 1200px`                           |
+
+---
+
+## Source of truth
+
+When unsure about a token name or mapping, consult these files:
+
+| File                                                        | Purpose                                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------- |
+| `src/styles/design-system-tokens/design-system-tokens.css`  | Generated CSS with both primitive and semantic `:root` blocks |
+| `src/styles/design-system-tokens/design-system-tokens.json` | Figma Variables export (source data)                          |
+| `scripts/build-tokens.ts`                                   | Style Dictionary build configuration                          |
+| `scripts/build-tokens.transforms.ts`                        | Name transforms and category assignment logic                 |
+
+To regenerate tokens after a Figma export update: `npm run convert-tokens`

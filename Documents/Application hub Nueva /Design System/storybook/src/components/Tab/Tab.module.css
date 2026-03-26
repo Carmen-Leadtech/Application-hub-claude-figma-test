@@ -1,0 +1,24 @@
+.tab {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  font-style: normal;
+  font-weight: var(--font-weight-strong);
+  padding: var(--spacing-xs);
+}
+
+.tabActive {
+  color: #3b3d40; /* exists in primitives as --neutrals-dark-70 */
+}
+
+.tabSizeS {
+  font-size: var(--font-size-body-m-default);
+  line-height: var(--line-height-body-m-default);
+}
+
+.tabSizeM {
+  font-size: var(--font-size-titles-m);
+  line-height: var(--line-height-titles-m);
+}

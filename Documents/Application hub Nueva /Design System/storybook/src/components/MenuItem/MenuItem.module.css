@@ -1,0 +1,29 @@
+.root {
+  align-items: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 10px;
+  padding: var(--spacing-xs) var(--spacing-m);
+
+  color: #141415;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-m-default);
+  font-style: normal;
+  font-weight: var(--font-weight-default);
+  line-height: var(--line-height-body-m-default);
+  text-align: left;
+
+  &:hover {
+    background: var(--color-fill-common-weaker);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-border-interactivity-default);
+  }
+}
+
+.active {
+  background: #e1f1fd;
+}
