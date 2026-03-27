@@ -10,6 +10,8 @@ import { useApplications, Status } from "@/context/ApplicationContext";
 import { Button } from "components/Button/Button";
 import { Tabs } from "components/Tabs/Tabs";
 import { Tab } from "components/Tab/Tab";
+import featureBanner from "../../img/Feature Banner.svg";
+import featureBanner2 from "../../img/Feature Banner 2.svg";
 
 const allTabs: Status[] = ["Draft", "Applied", "Under Review", "Closed"];
 const tabLabels = ["All", ...allTabs];
@@ -151,33 +153,13 @@ const Index = () => {
                       Subtitle for more info lorem ipsum dolor sit amet consec
                     </p>
                   </div>
-                  {/* Illustration: overlapping profile circles + score */}
-                  <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {[
-                        "var(--color-fill-common-brand-weak)",
-                        "var(--color-fill-system-warning-weak)",
-                        "var(--color-fill-system-success-weak)",
-                      ].map((bg, i) => (
-                        <div key={i} style={{
-                          height: "32px", width: "32px", borderRadius: "50%",
-                          background: bg,
-                          border: "2px solid var(--color-fill-common-default)",
-                          marginLeft: i === 0 ? 0 : "-10px",
-                          zIndex: 3 - i,
-                          position: "relative",
-                        }} />
-                      ))}
-                    </div>
-                    <div style={{
-                      height: "40px", width: "40px", borderRadius: "50%",
-                      background: "var(--color-fill-interactivity-default)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                      flexShrink: 0,
-                    }}>
-                      <span style={{ fontSize: "var(--font-size-small-details-xs-captions)", fontWeight: "var(--font-weight-strong)", color: "var(--color-text-inverted)" }}>80</span>
-                    </div>
+                  {/* Illustration image */}
+                  <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
+                    <img
+                      src={featureBanner}
+                      alt="LinkedIn Analyzer illustration"
+                      style={{ width: "100%", maxHeight: "100px", objectFit: "contain", objectPosition: "bottom left" }}
+                    />
                   </div>
                 </div>
 
@@ -211,24 +193,13 @@ const Index = () => {
                       Subtitle for more info lorem ipsum dolor sit amet consec
                     </p>
                   </div>
-                  {/* Illustration: person avatar + speech bubble */}
-                  <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "var(--spacing-xs)" }}>
-                    <div style={{
-                      height: "48px", width: "48px", borderRadius: "50%",
-                      background: "var(--color-fill-system-success-weak)",
-                      border: "2px solid var(--color-fill-common-default)",
-                      flexShrink: 0,
-                    }} />
-                    <div style={{
-                      flex: 1,
-                      background: "var(--color-fill-common-default)",
-                      borderRadius: "var(--corner-radius-s)",
-                      padding: "var(--spacing-xs)",
-                      display: "flex", flexDirection: "column", gap: "var(--spacing-xxs-exception)",
-                    }}>
-                      <div style={{ height: "5px", background: "var(--color-fill-common-weak)", borderRadius: "var(--corner-radius-xs)" }} />
-                      <div style={{ height: "5px", width: "70%", background: "var(--color-fill-common-weak)", borderRadius: "var(--corner-radius-xs)" }} />
-                    </div>
+                  {/* Illustration image */}
+                  <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
+                    <img
+                      src={featureBanner2}
+                      alt="Interview Practice illustration"
+                      style={{ width: "100%", maxHeight: "100px", objectFit: "contain", objectPosition: "bottom left" }}
+                    />
                   </div>
                 </div>
               </div>
