@@ -13,7 +13,6 @@ import { Button } from "components/Button/Button";
 import { ButtonIcon } from "components/ButtonIcon/ButtonIcon";
 import { Textfield } from "components/Textfield/Textfield";
 import { Icon } from "components/Icon/Icon";
-import { InfoCard } from "components/InfoCard/InfoCard";
 import { Popover } from "components/Popover/Popover";
 
 const JD_MAX = 5000;
@@ -83,6 +82,9 @@ const ApplicationDetail = () => {
   const [notesLoaded, setNotesLoaded] = useState(false);
   const [jobInfoSaved, setJobInfoSaved] = useState(false);
   const [jobFieldsLoaded, setJobFieldsLoaded] = useState(false);
+  const [roleFocused, setRoleFocused] = useState(false);
+  const [companyFocused, setCompanyFocused] = useState(false);
+  const [jdFocused, setJdFocused] = useState(false);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
@@ -335,29 +337,35 @@ const ApplicationDetail = () => {
 
                 {!jobInfoSaved ? (
                   <>
-                    {/* DS Textfield — Job Title (no icon) */}
+                    {/* DS Textfield — Job Title (placeholder only on focus) */}
                     <Textfield
                       label="Job Title"
                       value={roleInput}
-                      placeholder="Example: Marketing Manager, Backend Developer…"
+                      placeholder={roleFocused ? "Example: Marketing Manager, Backend Developer…" : ""}
+                      onFocus={() => setRoleFocused(true)}
+                      onBlur={() => setRoleFocused(false)}
                       onChange={(e) => setRoleInput((e.target as HTMLInputElement).value)}
                     />
 
-                    {/* DS Textfield — Company (no icon) */}
+                    {/* DS Textfield — Company (placeholder only on focus) */}
                     <Textfield
                       label="Company"
                       value={companyInput}
-                      placeholder="Add company name…"
+                      placeholder={companyFocused ? "Add company name…" : ""}
+                      onFocus={() => setCompanyFocused(true)}
+                      onBlur={() => setCompanyFocused(false)}
                       onChange={(e) => setCompanyInput((e.target as HTMLInputElement).value)}
                     />
 
-                    {/* DS Textfield multiline — Job Description (no icon) */}
+                    {/* DS Textfield multiline — Job Description (placeholder only on focus) */}
                     <Textfield
                       label="Job Description"
                       multiline
                       rows={6}
                       value={jdInput}
-                      placeholder="Paste only the most relevant parts of the job description."
+                      placeholder={jdFocused ? "Paste only the most relevant parts of the job description." : ""}
+                      onFocus={() => setJdFocused(true)}
+                      onBlur={() => setJdFocused(false)}
                       assistiveText={`${jdInput.length}/${JD_MAX}`}
                       assistiveTextAlign="right"
                       onChange={(e) => {
@@ -443,11 +451,11 @@ const ApplicationDetail = () => {
                       borderRadius: "var(--corner-radius-s)",
                       border: "1px solid var(--color-border-weaker)",
                       padding: "var(--spacing-s-exception) var(--spacing-m)",
-                      background: "var(--color-fill-common-weakest)",
+                      background: "var(--color-fill-common-brand-weak)",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-s-exception)", minWidth: 0 }}>
-                      <Icon name="document" size={20} color="var(--color-icons-system-success)" />
+                      <Icon name="add" size={20} color="var(--color-icons-secondary)" />
                       <div style={{ minWidth: 0 }}>
                         <p style={{ fontSize: "var(--font-size-body-s)", fontWeight: "var(--font-weight-strong)", color: "var(--color-text-default)", margin: 0 }}>Resume</p>
                         <p style={{ fontSize: "var(--font-size-small-details-xs-captions)", color: "var(--color-text-secondary)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -458,11 +466,11 @@ const ApplicationDetail = () => {
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", flexShrink: 0 }}>
                       {app.resumeName ? (
                         <>
-                          {/* View — chip style */}
+                          {/* View — secondary rounded */}
                           <Button
-                            variant="tool"
+                            variant="secondary"
                             size="S"
-                            style={{ borderRadius: "var(--corner-radius-xl)" }}
+                            shape="rounded"
                             onClick={() => navigate(`/application/${id}/preview-cv`)}
                           >
                             <Icon name="visibility" size={14} />
@@ -512,9 +520,9 @@ const ApplicationDetail = () => {
                         </>
                       ) : (
                         <Button
-                          variant="tool"
+                          variant="secondary"
                           size="S"
-                          style={{ borderRadius: "var(--corner-radius-xl)" }}
+                          shape="rounded"
                           onClick={() => openReplace("cv")}
                         >
                           Add resume
@@ -531,11 +539,11 @@ const ApplicationDetail = () => {
                       borderRadius: "var(--corner-radius-s)",
                       border: "1px solid var(--color-border-weaker)",
                       padding: "var(--spacing-s-exception) var(--spacing-m)",
-                      background: "var(--color-fill-common-weakest)",
+                      background: "var(--color-fill-common-brand-weak)",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-s-exception)", minWidth: 0 }}>
-                      <Icon name="document_bullets" size={20} color="var(--color-icons-brand)" />
+                      <Icon name="add" size={20} color="var(--color-icons-secondary)" />
                       <div style={{ minWidth: 0 }}>
                         <p style={{ fontSize: "var(--font-size-body-s)", fontWeight: "var(--font-weight-strong)", color: "var(--color-text-default)", margin: 0 }}>Cover Letter</p>
                         <p style={{ fontSize: "var(--font-size-small-details-xs-captions)", color: "var(--color-text-secondary)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -546,11 +554,11 @@ const ApplicationDetail = () => {
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", flexShrink: 0 }}>
                       {app.coverLetterName ? (
                         <>
-                          {/* View — chip style */}
+                          {/* View — secondary rounded */}
                           <Button
-                            variant="tool"
+                            variant="secondary"
                             size="S"
-                            style={{ borderRadius: "var(--corner-radius-xl)" }}
+                            shape="rounded"
                             onClick={() => navigate(`/application/${id}/preview-cl`)}
                           >
                             <Icon name="visibility" size={14} />
@@ -600,9 +608,9 @@ const ApplicationDetail = () => {
                         </>
                       ) : (
                         <Button
-                          variant="tool"
+                          variant="secondary"
                           size="S"
-                          style={{ borderRadius: "var(--corner-radius-xl)" }}
+                          shape="rounded"
                           onClick={() => openReplace("cover-letter")}
                         >
                           Add cover letter
@@ -649,28 +657,54 @@ const ApplicationDetail = () => {
                 />
               </div>
 
-              {/* Practice your interview — gradient-1 5% + InfoCard + rounded Button */}
+              {/* Practice your interview — gradient-1 5%, two-column: text+button left, image right */}
               <div style={{
                 borderRadius: "var(--corner-radius-m)",
                 background: "linear-gradient(135deg, rgba(210,31,255,0.05), rgba(0,87,163,0.05))",
-                overflow: "hidden",
                 border: "1px solid var(--color-border-weaker)",
+                overflow: "hidden",
               }}>
-                <InfoCard
-                  title="Practice your interview"
-                  content="Practice with a mock interview tailored to this job and get instant feedback."
-                  iconName="ai_stars"
-                  iconColor="var(--color-icons-brand)"
-                />
-                <div style={{ padding: "0 var(--spacing-m) var(--spacing-m)" }}>
-                  <Button
-                    variant="primary"
-                    shape="rounded"
-                    isFullWidth
-                    onClick={() => navigate(userPlan === "premium" ? "/interview-practice/form" : "/interview-practice")}
-                  >
-                    Start practice session
-                  </Button>
+                <div style={{
+                  display: "flex", alignItems: "center",
+                  gap: "var(--spacing-l)", padding: "var(--spacing-l)",
+                }}>
+                  {/* LEFT: icon + title + description + button */}
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--spacing-s-exception)" }}>
+                    <Icon name="ai_stars" size={20} color="var(--color-icons-brand)" />
+                    <h3 style={{
+                      fontSize: "var(--font-size-body-m-default)",
+                      fontWeight: "var(--font-weight-strong)",
+                      color: "var(--color-text-default)",
+                      margin: 0,
+                    }}>
+                      Practice your interview
+                    </h3>
+                    <p style={{
+                      fontSize: "var(--font-size-body-s)",
+                      color: "var(--color-text-secondary)",
+                      margin: 0,
+                      lineHeight: "var(--line-height-body-s)",
+                    }}>
+                      Practice with a mock interview tailored to this job and get instant feedback.
+                    </p>
+                    <div>
+                      <Button
+                        variant="primary"
+                        size="S"
+                        shape="rounded"
+                        onClick={() => navigate(userPlan === "premium" ? "/interview-practice/form" : "/interview-practice")}
+                      >
+                        Start practice session
+                      </Button>
+                    </div>
+                  </div>
+                  {/* RIGHT: illustration image (drop interview-practice.png into public/) */}
+                  <img
+                    src="/interview-practice.png"
+                    alt="Interview practice illustration"
+                    style={{ width: "120px", height: "120px", objectFit: "contain", flexShrink: 0 }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                  />
                 </div>
               </div>
             </div>

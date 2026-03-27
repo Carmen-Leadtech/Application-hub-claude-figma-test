@@ -8,7 +8,6 @@ import EmptyState from "@/components/EmptyState";
 import GuideTourModal from "@/components/GuideTourModal";
 import { useApplications, Status } from "@/context/ApplicationContext";
 import { Button } from "components/Button/Button";
-import { Switch } from "components/Switch/Switch";
 import { Tabs } from "components/Tabs/Tabs";
 import { Tab } from "components/Tab/Tab";
 
@@ -44,28 +43,6 @@ const Index = () => {
 
       <main style={{ marginLeft: "220px", display: "flex", justifyContent: "center" }}>
         <div style={{ width: "100%", maxWidth: "1200px", padding: "var(--spacing-xl)" }}>
-
-          {/* Free/Premium Toggle */}
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-s-exception)", marginBottom: "var(--size-20)", justifyContent: "flex-end" }}>
-            <span style={{
-              fontSize: "var(--font-size-body-s)",
-              fontWeight: "var(--font-weight-strong)",
-              color: userPlan === "free" ? "var(--color-text-default)" : "var(--color-text-secondary)",
-            }}>
-              Free
-            </span>
-            <Switch
-              checked={userPlan === "premium"}
-              onChange={(checked) => setUserPlan(checked ? "premium" : "free")}
-            />
-            <span style={{
-              fontSize: "var(--font-size-body-s)",
-              fontWeight: "var(--font-weight-strong)",
-              color: userPlan === "premium" ? "var(--color-text-default)" : "var(--color-text-secondary)",
-            }}>
-              Premium
-            </span>
-          </div>
 
           {/* Hero Banner */}
           <div style={{
@@ -293,7 +270,7 @@ const Index = () => {
             {/* Cards Grid */}
             <div style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, 336px)",
               gap: "var(--size-20)",
             }}>
               {filtered.map((app, i) => (

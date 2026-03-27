@@ -51,6 +51,8 @@ const ApplicationCard = ({ id, onClick }: ApplicationCardProps) => {
       <div
         onClick={onClick}
         style={{
+          width: "336px",
+          maxWidth: "100%",
           background: "var(--color-fill-common-default)",
           borderRadius: "var(--corner-radius-s)",
           border: "1px solid var(--color-border-weaker)",
@@ -58,6 +60,7 @@ const ApplicationCard = ({ id, onClick }: ApplicationCardProps) => {
           padding: "var(--spacing-m)",
           cursor: "pointer",
           transition: "box-shadow 0.15s ease, border-color 0.15s ease",
+          boxSizing: "border-box",
         }}
         onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.10)")}
         onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}

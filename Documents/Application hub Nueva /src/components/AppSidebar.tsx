@@ -18,24 +18,27 @@ const langOptions = [
   { value: "de", label: "DE", full: "German" },
 ];
 
-const navSections = [
+const navSections: Array<{
+  title?: string;
+  items: Array<{ label: string; iconName: string; path?: string; badge?: string; iconColor?: string }>;
+}> = [
   {
     items: [
-      { label: "Application Hub", iconName: "apps", path: "/Application-hub-premium" },
+      { label: "Application Hub", iconName: "suitcase", path: "/Application-hub-premium" },
     ],
   },
   {
     title: "DOCUMENTS",
     items: [
-      { label: "Resumes",       iconName: "document",         path: "/documents", badge: "2" },
-      { label: "Cover Letters", iconName: "document_bullets", path: "/documents", badge: "1" },
+      { label: "Resumes",       iconName: "pdf_document",  path: "/documents", badge: "2" },
+      { label: "Cover Letters", iconName: "create",        path: "/documents", badge: "1" },
     ],
   },
   {
     title: "CAREER TOOLS",
     items: [
       { label: "Interview AI",      iconName: "mic" },
-      { label: "LinkedIn Analyzer", iconName: "in" },
+      { label: "LinkedIn Analyzer", iconName: "in", iconColor: "var(--color-icons-weak)" },
       { label: "Resume Review",     iconName: "document_search" },
     ],
   },
@@ -107,7 +110,14 @@ const AppSidebar = () => {
                 <MenuItemBlock
                   key={item.label}
                   sectionName={item.label}
-                  iconName={item.iconName}
+                  iconName={!item.iconColor ? item.iconName : undefined}
+                  icon={item.iconColor ? (
+                    <Icon
+                      name={item.iconName}
+                      size={20}
+                      color={isActive ? "var(--brand-500, #006dcc)" : item.iconColor}
+                    />
+                  ) : undefined}
                   isActive={isActive}
                   onClick={() => item.path && navigate(item.path)}
                   endContent={
@@ -173,15 +183,15 @@ const AppSidebar = () => {
           icon={
             <div style={{
               height: "28px", width: "28px",
-              borderRadius: "var(--corner-radius-xs)",
-              background: "var(--color-fill-interactivity-default)",
+              borderRadius: "var(--corner-radius-s)",
+              background: "var(--color-fill-common-brand-weak)",
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
             }}>
               <span style={{
                 fontSize: "var(--font-size-small-details-xs-captions)",
                 fontWeight: "var(--font-weight-strong)",
-                color: "var(--color-text-inverted)",
+                color: "var(--color-text-brand)",
                 lineHeight: 1,
               }}>A</span>
             </div>
@@ -203,8 +213,8 @@ const AppSidebar = () => {
         <div style={{ padding: "0 var(--spacing-m)" }}>
           <Button
             variant="tool"
+            shape="rounded"
             isFullWidth
-            style={{ borderRadius: "var(--corner-radius-xl)" }}
             onClick={() => {}}
           >
             <Icon name="badge_awards" size={16} />
